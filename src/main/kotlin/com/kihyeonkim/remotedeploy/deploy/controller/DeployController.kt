@@ -6,6 +6,7 @@ import com.cdancy.jenkins.rest.domain.system.SystemInfo
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseBody
 
 /**
  * IDE : IntelliJ IDEA
@@ -17,7 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 @RequestMapping("/deploy")
 class DeployController {
 	@GetMapping
-	fun getTest() {
+	@ResponseBody
+	fun getTest() : String {
 		val jenkinsClient: JenkinsClient = JenkinsClient.builder()
 			.endPoint("http://127.0.0.1:9000")
 			.credentials("kihyeonkim:jenkins")
@@ -25,6 +27,8 @@ class DeployController {
 
 		val systemInfo: SystemInfo = jenkinsClient.api().systemApi().systemInfo()
 		println(systemInfo)
+
+		return "OK"
 	}
 
 }

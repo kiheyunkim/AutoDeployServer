@@ -1,19 +1,38 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <project>
 	<actions/>
-	<description th:value="${description}"></description>
+	<description th:utext="${description}"></description>
 	<keepDependencies>false</keepDependencies>
-	<properties/>
+	<properties>
+		<jenkins.model.BuildDiscarderProperty>
+			<strategy class="hudson.tasks.LogRotator">
+				<daysToKeep>30</daysToKeep>
+				<numToKeep>-1</numToKeep>
+				<artifactDaysToKeep>-1</artifactDaysToKeep>
+				<artifactNumToKeep>-1</artifactNumToKeep>
+			</strategy>
+		</jenkins.model.BuildDiscarderProperty>
+		<hudson.model.ParametersDefinitionProperty>
+			<parameterDefinitions>
+				<hudson.model.StringParameterDefinition>
+					<name>gitBanch</name>
+					<description>Deploy Branch Name</description>
+					<defaultValue>master</defaultValue>
+					<trim>false</trim>
+				</hudson.model.StringParameterDefinition>
+			</parameterDefinitions>
+		</hudson.model.ParametersDefinitionProperty>
+	</properties>
 	<scm class="hudson.plugins.git.GitSCM" plugin="git@4.8.1">
 		<configVersion>2</configVersion>
 		<userRemoteConfigs>
 			<hudson.plugins.git.UserRemoteConfig>
-				<url th:text="${gitUrl}"></url>
+				<url  th:utext="${gitUrl}"></url>
 			</hudson.plugins.git.UserRemoteConfig>
 		</userRemoteConfigs>
 		<branches>
 			<hudson.plugins.git.BranchSpec>
-				<name>*/master</name>
+				<name>*/${gitBanch}</name>
 			</hudson.plugins.git.BranchSpec>
 		</branches>
 		<doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -26,7 +45,8 @@
 	<blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
 	<triggers/>
 	<concurrentBuild>false</concurrentBuild>
-	<builders/>
+	<builders th:utext="${builder}">
+	</builders>
 	<publishers/>
 	<buildWrappers/>
 </project>

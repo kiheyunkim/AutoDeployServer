@@ -1,26 +1,12 @@
 package com.kihyeonkim.remotedeploy.deploy.controller
 
 
-import com.cdancy.jenkins.rest.JenkinsClient
-import com.cdancy.jenkins.rest.domain.system.SystemInfo
-import freemarker.template.Configuration
-import freemarker.template.TemplateExceptionHandler
-import org.apache.commons.io.IOUtils
-import org.springframework.core.io.ClassPathResource
+import com.kihyeonkim.remotedeploy.jenkins.api.Jenkins
+import com.kihyeonkim.remotedeploy.jenkins.enumeration.BuildType
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
-import org.thymeleaf.TemplateEngine
-import org.thymeleaf.context.Context
-import org.thymeleaf.templatemode.TemplateMode
-import org.thymeleaf.templateresolver.StringTemplateResolver
-import org.xml.sax.InputSource
-import java.io.FileInputStream
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.io.StringReader
-import java.util.*
 
 /**
  * IDE : IntelliJ IDEA
@@ -30,12 +16,14 @@ import java.util.*
  */
 @Controller
 @RequestMapping("/deploy")
-class DeployController {
+class DeployController(private val jenkins: Jenkins) {
 	@GetMapping
 	@ResponseBody
 	fun getTest(): String {
 
-		val templateEngine = TemplateEngine()
+		jenkins.createJenkinsJob("textJob","http://www.naver.com", BuildType.MAVEN)
+
+		/*val templateEngine = TemplateEngine()
 		val templateResolver = StringTemplateResolver();
 		templateResolver.templateMode = TemplateMode.XML
 		templateEngine.setTemplateResolver(templateResolver)
@@ -54,7 +42,8 @@ class DeployController {
 			.credentials("kihyeonkim:jenkins")
 			.build()
 
-		//val systemInfo: SystemInfo = jenkinsClient.api().systemApi().systemInfo()
+
+		//val systemInfo: SystemInfo = jenkinsClient.api().systemApi().systemInfo()*/
 
 
 		return "OK"

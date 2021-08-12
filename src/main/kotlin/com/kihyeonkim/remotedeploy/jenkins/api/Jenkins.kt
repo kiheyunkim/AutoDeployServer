@@ -1,6 +1,7 @@
-package com.kihyeonkim.remotedeploy.jenkins
+package com.kihyeonkim.remotedeploy.jenkins.api
 
 import com.cdancy.jenkins.rest.JenkinsClient
+import com.kihyeonkim.remotedeploy.jenkins.enumeration.BuildType
 import org.apache.commons.io.IOUtils
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.ClassPathResource
@@ -47,15 +48,27 @@ class Jenkins(
 		templateEngine.setTemplateResolver(templateResolver)
 	}
 
-	fun createJenkinsJob(jobName: String, gitUrl: String): Boolean {
+	fun createJenkinsJob(jobName: String, gitUrl: String, buildType: BuildType): Boolean {
 		val jobCreateTemplateResource = ClassPathResource("jenkinsTemplate/jobCreateTemplate.xml")
 		val jobCreateTemplateFile = IOUtils.toString(FileInputStream(jobCreateTemplateResource.file), Charsets.UTF_8)
 
-		val context = Context(Locale.ENGLISH)
-		context.setVariable("gitUrl", gitUrl)
 
-		val configXml = templateEngine.process(jobCreateTemplateFile, context)
-		val requestStatus = jenkinsClient.api().jobsApi().create(null, jobName, configXml)
+		val jobBuilderResource = when (buildType) {
+			BuildType.MAVEN -> ClassPathResource("jenkinsTemplate/buildTemplate/mavenBuild.xml")
+			BuildType.GRADLE -> ClassPathResource("jenkinsTemplate/buildTemplate/mavenBuild.xml")
+			BuildType.OTHER -> ClassPathResource("jenkinsTemplate/buildTemplate/mavenBuild.xml")
+		}
+		val jobBuilderTemplateFile = IOUtils.toString(FileInputStream(jobBuilderResource.file), Charsets.UTF_8)
+		val jenkinsBuilderInfoXml = templateEngine.process(jobBuilderTemplateFile, Context())
+
+		println(jenkinsBuilderInfoXml)
+		val context = Context(Locale.ENGLISH)
+		context.setVariable("description", "DEPLOY_${jobName.uppercase()}")
+		context.setVariable("gitUrl", gitUrl)
+		context.setVariable("builder", jenkinsBuilderInfoXml)
+
+		val jenkinsConfigXml = templateEngine.process(jobCreateTemplateFile, context)
+		val requestStatus = jenkinsClient.api().jobsApi().create(null, jobName, jenkinsConfigXml)
 
 		return requestStatus.value()
 	}

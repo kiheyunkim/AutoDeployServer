@@ -1,6 +1,7 @@
 package com.kihyeonkim.remotedeploy.jenkins.api
 
 import com.cdancy.jenkins.rest.JenkinsClient
+import com.kihyeonkim.remotedeploy.common.response.DeployResponse
 import com.kihyeonkim.remotedeploy.jenkins.enumeration.BuildType
 import org.apache.commons.io.IOUtils
 import org.springframework.beans.factory.annotation.Value
@@ -48,7 +49,7 @@ class Jenkins(
 		templateEngine.setTemplateResolver(templateResolver)
 	}
 
-	fun createJenkinsJob(jobName: String, gitUrl: String, buildType: BuildType): Boolean {
+	fun createJenkinsJob(jobName: String, gitUrl: String, buildType: BuildType): DeployResponse<*> {
 		val jobCreateTemplateResource = ClassPathResource("jenkinsTemplate/jobCreateTemplate.xml")
 		val jobCreateTemplateFile = IOUtils.toString(FileInputStream(jobCreateTemplateResource.file), Charsets.UTF_8)
 
@@ -61,7 +62,6 @@ class Jenkins(
 		val jobBuilderTemplateFile = IOUtils.toString(FileInputStream(jobBuilderResource.file), Charsets.UTF_8)
 		val jenkinsBuilderInfoXml = templateEngine.process(jobBuilderTemplateFile, Context())
 
-		println(jenkinsBuilderInfoXml)
 		val context = Context(Locale.ENGLISH)
 		context.setVariable("description", "DEPLOY_${jobName.uppercase()}")
 		context.setVariable("gitUrl", gitUrl)
@@ -70,6 +70,6 @@ class Jenkins(
 		val jenkinsConfigXml = templateEngine.process(jobCreateTemplateFile, context)
 		val requestStatus = jenkinsClient.api().jobsApi().create(null, jobName, jenkinsConfigXml)
 
-		return requestStatus.value()
+		return DeployResponse(requestStatus.value())
 	}
 }

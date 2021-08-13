@@ -2,7 +2,8 @@ package com.kihyeonkim.remotedeploy.deploy.controller
 
 
 import com.kihyeonkim.remotedeploy.common.response.DeployResponse
-import com.kihyeonkim.remotedeploy.jenkins.api.Jenkins
+import com.kihyeonkim.remotedeploy.deploy.service.DeployService
+import com.kihyeonkim.remotedeploy.jenkins.api.JenkinsApi
 import com.kihyeonkim.remotedeploy.jenkins.enumeration.BuildType
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
@@ -13,19 +14,38 @@ import org.springframework.web.bind.annotation.*
  * Github : http://github.com/kiheyunkim
  * Comment :
  */
-@RestController
+@Controller
 @RequestMapping("/deploy")
-class DeployController(private val jenkins: Jenkins) {
+class DeployController(private val deployService: DeployService) {
+	@GetMapping
+	fun getIndex(): String {
+		return "index"
+	}
+
 	@PostMapping("/create")
+	@ResponseBody
 	fun postCreateJenkinsJob(jobName: String, gitUrl: String, builderType: String): DeployResponse<*> {
 
 		val buildType: BuildType = BuildType.valueOf(builderType);
 
-		return jenkins.createJenkinsJob(jobName, gitUrl, buildType)
+		return deployService.createJenkinsJob(jobName, gitUrl, buildType)
+	}
+
+	@PostMapping("/startBuild")
+	@ResponseBody
+	fun postStartJenkinsJob(jobName: String, params: Map<String, List<String>>?): DeployResponse<*> {
+		return deployService.startJenkinsJob(jobName, params)
 	}
 
 	@DeleteMapping("/delete")
+	@ResponseBody
 	fun deleteJenkinsJob(jobName: String): DeployResponse<*> {
-		return jenkins.deleteJenkinsJob(jobName)
+		return deployService.deleteJenkinsJob(jobName)
+	}
+
+	@GetMapping("/deployProgress")
+	@ResponseBody
+	fun getDeployProgress(jobName: String, jobNumber: Int, start: Int?): DeployResponse<*> {
+		return deployService.getDeployProgress(jobName, jobNumber, start)
 	}
 }

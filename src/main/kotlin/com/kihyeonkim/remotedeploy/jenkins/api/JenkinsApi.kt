@@ -1,8 +1,10 @@
 package com.kihyeonkim.remotedeploy.jenkins.api
 
 import com.cdancy.jenkins.rest.JenkinsClient
+import com.cdancy.jenkins.rest.domain.common.RequestStatus
 import com.kihyeonkim.remotedeploy.common.response.DeployResponse
 import com.kihyeonkim.remotedeploy.jenkins.enumeration.BuildType
+import com.kihyeonkim.remotedeploy.jenkins.model.JenkinsLog
 import org.apache.commons.io.IOUtils
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.ClassPathResource
@@ -21,7 +23,7 @@ import java.util.*
  * Comment :
  */
 @Component
-class Jenkins(
+class JenkinsApi(
 	@Value("\${jenkins.jenkinsUrl}")
 	private var jenkinsUrl: String,
 
@@ -47,7 +49,7 @@ class Jenkins(
 		templateEngine.setTemplateResolver(templateResolver)
 	}
 
-	fun createJenkinsJob(jobName: String, gitUrl: String, buildType: BuildType): DeployResponse<*> {
+	fun createJenkinsJob(jobName: String, gitUrl: String, buildType: BuildType): RequestStatus {
 		val jobCreateTemplateResource = ClassPathResource("jenkinsTemplate/jobCreateTemplate.xml")
 		val jobCreateTemplateFile = IOUtils.toString(FileInputStream(jobCreateTemplateResource.file), Charsets.UTF_8)
 
@@ -66,14 +68,31 @@ class Jenkins(
 		context.setVariable("builder", jenkinsBuilderInfoXml)
 
 		val jenkinsConfigXml = templateEngine.process(jobCreateTemplateFile, context)
-		val requestStatus = jenkinsClient.api().jobsApi().create(null, jobName, jenkinsConfigXml)
 
-		return DeployResponse(requestStatus.value())
+		return jenkinsClient.api().jobsApi().create(null, jobName, jenkinsConfigXml)
 	}
 
-	fun deleteJenkinsJob(jobName: String): DeployResponse<*> {
-		val requestStatus = jenkinsClient.api().jobsApi().delete(null, jobName)
+	fun startJenkinsJob(jobName: String, params: Map<String, List<String>>?): Int {
+		val requestStatus = if (params == null) {
+			jenkinsClient.api().jobsApi().build(null, jobName)
+		} else {
+			jenkinsClient.api().jobsApi().buildWithParameters(null, jobName, params)
+		}
 
-		return DeployResponse(requestStatus.value())
+		return requestStatus.value()
+	}
+
+	fun getJenkinsLog(jobName: String, jobNumber: Int, start: Int?): JenkinsLog {
+		val progressiveText = if (start == null) {
+			jenkinsClient.api().jobsApi().progressiveText(null, jobName, jobNumber)
+		} else {
+			jenkinsClient.api().jobsApi().progressiveText(null, jobName, jobNumber, start.toInt())
+		}
+
+		return JenkinsLog(progressiveText.text(), progressiveText.size(), progressiveText.hasMoreData())
+	}
+
+	fun deleteJenkinsJob(jobName: String): RequestStatus {
+		return jenkinsClient.api().jobsApi().delete(null, jobName)
 	}
 }

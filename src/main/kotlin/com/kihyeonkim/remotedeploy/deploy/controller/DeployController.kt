@@ -5,9 +5,7 @@ import com.kihyeonkim.remotedeploy.common.response.DeployResponse
 import com.kihyeonkim.remotedeploy.jenkins.api.Jenkins
 import com.kihyeonkim.remotedeploy.jenkins.enumeration.BuildType
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.*
 
 /**
  * IDE : IntelliJ IDEA
@@ -15,16 +13,19 @@ import org.springframework.web.bind.annotation.ResponseBody
  * Github : http://github.com/kiheyunkim
  * Comment :
  */
-@Controller
+@RestController
 @RequestMapping("/deploy")
 class DeployController(private val jenkins: Jenkins) {
 	@PostMapping("/create")
-	@ResponseBody
-	fun getTest(jobName: String, gitUrl: String, builderType: String): DeployResponse<*> {
+	fun postCreateJenkinsJob(jobName: String, gitUrl: String, builderType: String): DeployResponse<*> {
 
 		val buildType: BuildType = BuildType.valueOf(builderType);
 
 		return jenkins.createJenkinsJob(jobName, gitUrl, buildType)
 	}
 
+	@DeleteMapping("/delete")
+	fun deleteJenkinsJob(jobName: String): DeployResponse<*> {
+		return jenkins.deleteJenkinsJob(jobName)
+	}
 }

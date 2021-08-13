@@ -34,8 +34,6 @@ class Jenkins(
 	@Value("\${jenkins.jenkinsPassword}")
 	private var jenkinsPassword: String
 ) {
-
-
 	private val jenkinsClient: JenkinsClient = JenkinsClient.builder()
 		.endPoint("$jenkinsUrl:$jenkinsPort")
 		.credentials("$jenkinsId:$jenkinsPassword")
@@ -56,7 +54,7 @@ class Jenkins(
 
 		val jobBuilderResource = when (buildType) {
 			BuildType.MAVEN -> ClassPathResource("jenkinsTemplate/buildTemplate/mavenBuild.xml")
-			BuildType.GRADLE -> ClassPathResource("jenkinsTemplate/buildTemplate/mavenBuild.xml")
+			BuildType.GRADLE -> ClassPathResource("jenkinsTemplate/buildTemplate/gradleBuild.xml")
 			BuildType.OTHER -> ClassPathResource("jenkinsTemplate/buildTemplate/mavenBuild.xml")
 		}
 		val jobBuilderTemplateFile = IOUtils.toString(FileInputStream(jobBuilderResource.file), Charsets.UTF_8)
@@ -69,6 +67,12 @@ class Jenkins(
 
 		val jenkinsConfigXml = templateEngine.process(jobCreateTemplateFile, context)
 		val requestStatus = jenkinsClient.api().jobsApi().create(null, jobName, jenkinsConfigXml)
+
+		return DeployResponse(requestStatus.value())
+	}
+
+	fun deleteJenkinsJob(jobName: String): DeployResponse<*> {
+		val requestStatus = jenkinsClient.api().jobsApi().delete(null, jobName)
 
 		return DeployResponse(requestStatus.value())
 	}

@@ -1,26 +1,12 @@
 package com.kihyeonkim.remotedeploy.deploy.controller
 
 
-import com.cdancy.jenkins.rest.JenkinsClient
-import com.cdancy.jenkins.rest.domain.system.SystemInfo
-import freemarker.template.Configuration
-import freemarker.template.TemplateExceptionHandler
-import org.apache.commons.io.IOUtils
-import org.springframework.core.io.ClassPathResource
+import com.kihyeonkim.remotedeploy.common.response.DeployResponse
+import com.kihyeonkim.remotedeploy.deploy.service.DeployService
+import com.kihyeonkim.remotedeploy.jenkins.api.JenkinsApi
+import com.kihyeonkim.remotedeploy.jenkins.enumeration.BuildType
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseBody
-import org.thymeleaf.TemplateEngine
-import org.thymeleaf.context.Context
-import org.thymeleaf.templatemode.TemplateMode
-import org.thymeleaf.templateresolver.StringTemplateResolver
-import org.xml.sax.InputSource
-import java.io.FileInputStream
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.io.StringReader
-import java.util.*
+import org.springframework.web.bind.annotation.*
 
 /**
  * IDE : IntelliJ IDEA
@@ -30,34 +16,36 @@ import java.util.*
  */
 @Controller
 @RequestMapping("/deploy")
-class DeployController {
+class DeployController(private val deployService: DeployService) {
 	@GetMapping
-	@ResponseBody
-	fun getTest(): String {
-
-		val templateEngine = TemplateEngine()
-		val templateResolver = StringTemplateResolver();
-		templateResolver.templateMode = TemplateMode.XML
-		templateEngine.setTemplateResolver(templateResolver)
-
-		val context = Context(Locale.ENGLISH)
-		context.setVariable("gitUrl", "https://www.naver.com")
-
-		val file = ClassPathResource("jenkinsTemplate/jobCreateTemplate.xml")
-		val result = IOUtils.toString(FileInputStream(file.file), Charsets.UTF_8)
-
-		val s = templateEngine.process(result, context)
-		println(s);
-
-		val jenkinsClient: JenkinsClient = JenkinsClient.builder()
-			.endPoint("http://127.0.0.1:9000")
-			.credentials("kihyeonkim:jenkins")
-			.build()
-
-		//val systemInfo: SystemInfo = jenkinsClient.api().systemApi().systemInfo()
-
-
-		return "OK"
+	fun getIndex(): String {
+		return "index"
 	}
 
+	@PostMapping("/create")
+	@ResponseBody
+	fun postCreateJenkinsJob(jobName: String, gitUrl: String, builderType: String): DeployResponse<*> {
+
+		val buildType: BuildType = BuildType.valueOf(builderType);
+
+		return deployService.createJenkinsJob(jobName, gitUrl, buildType)
+	}
+
+	@PostMapping("/startBuild")
+	@ResponseBody
+	fun postStartJenkinsJob(jobName: String, params: Map<String, List<String>>?): DeployResponse<*> {
+		return deployService.startJenkinsJob(jobName, params)
+	}
+
+	@DeleteMapping("/delete")
+	@ResponseBody
+	fun deleteJenkinsJob(jobName: String): DeployResponse<*> {
+		return deployService.deleteJenkinsJob(jobName)
+	}
+
+	@GetMapping("/deployProgress")
+	@ResponseBody
+	fun getDeployProgress(jobName: String, jobNumber: Int, start: Int?): DeployResponse<*> {
+		return deployService.getDeployProgress(jobName, jobNumber, start)
+	}
 }

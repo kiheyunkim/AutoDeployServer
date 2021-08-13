@@ -1,0 +1,8 @@
+<hudson.tasks.Maven>
+	<targets>clean package -DskipTests</targets>
+	<mavenName>maven</mavenName>
+	<usePrivateRepository>false</usePrivateRepository>
+	<settings class="jenkins.mvn.DefaultSettingsProvider"/>
+	<globalSettings class="jenkins.mvn.DefaultGlobalSettingsProvider"/>
+	<injectBuildVariables>false</injectBuildVariables>
+</hudson.tasks.Maven>

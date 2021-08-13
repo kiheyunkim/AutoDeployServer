@@ -1,0 +1,14 @@
+<hudson.plugins.gradle.Gradle plugin="gradle@1.37.1">
+	<switches></switches>
+	<tasks>gradle clean build</tasks>
+	<rootBuildScriptDir></rootBuildScriptDir>
+	<buildFile></buildFile>
+	<gradleName>gradle</gradleName>
+	<useWrapper>false</useWrapper>
+	<makeExecutable>false</makeExecutable>
+	<useWorkspaceAsHome>false</useWorkspaceAsHome>
+	<wrapperLocation></wrapperLocation>
+	<passAllAsSystemProperties>false</passAllAsSystemProperties>
+	<projectProperties></projectProperties>
+	<passAllAsProjectProperties>false</passAllAsProjectProperties>
+</hudson.plugins.gradle.Gradle>

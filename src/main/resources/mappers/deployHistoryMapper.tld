@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kihyeonkim.remotedeploy.deploy.mapper.DeployHistoryMapper">
+	<resultMap id="deployHistory" type="com.kihyeonkim.remotedeploy.deploy.model.DeployHistory">
+		<result column="ID" property="id"/>
+		<result column="DEPLOY_STAGE" property="deployStage"/>
+		<result column="DEPLOY_STATE" property="deployState"/>
+		<result column="SCENARIO_NAME" property="scenarioName"/>
+		<result column="BUILD_TARGET" property="buildTarget"/>
+		<result column="DEPLOY_FROM" property="deployFrom"/>
+		<result column="DEPLOY_TO" property="deployTo"/>
+		<result column="EXECUTION_DATE" property="executionDate"/>
+	</resultMap>
+
+	<select id="selectDeployHistory" parameterType="hashMap" resultMap="deployHistory">
+		SELECT ID,
+			   DEPLOY_STAGE,
+			   DEPLOY_STATE,
+			   SCENARIO_NAME,
+			   BUILD_TARGET,
+			   DEPLOY_FROM,
+			   DEPLOY_TO,
+			   EXECUTION_DATE
+		FROM DEPLOY_HISTORY
+		ORDER BY ID
+		LIMIT #{pageCount}
+		OFFSET ((#{page} - 1) * #{pageCount})
+	</select>
+
+	<insert id="insertDeployHistory" parameterType="deployHistory">
+		INSERT INTO DEPLOY_HISTORY(DEPLOY_STAGE,
+								   DEPLOY_STATE,
+								   SCENARIO_NAME,
+								   BUILD_TARGET,
+								   DEPLOY_FROM,
+								   DEPLOY_TO,
+								   EXECUTION_DATE)
+		VALUES (#{deployStage},
+				#{deployState},
+				#{scenarioName},
+				#{buildTarget},
+				#{deployFrom},
+				#{deployTo},
+				#{executionDate})
+	</insert>
+
+	<update id="updateDeployHistory" parameterType="hashMap">
+		UPDATE
+			DEPLOY_HISTORY
+		SET DEPLOY_STATE = #{deployState}
+		WHERE ID = #{id}
+	</update>
+</mapper>

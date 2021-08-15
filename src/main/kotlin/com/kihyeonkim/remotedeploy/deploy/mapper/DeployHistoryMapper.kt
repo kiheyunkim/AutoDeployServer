@@ -1,5 +1,7 @@
 package com.kihyeonkim.remotedeploy.deploy.mapper
 
+import com.kihyeonkim.remotedeploy.deploy.enumeration.DeployState
+import com.kihyeonkim.remotedeploy.deploy.model.DeployHistory
 import org.apache.ibatis.annotations.Mapper
 
 /**
@@ -10,4 +12,7 @@ import org.apache.ibatis.annotations.Mapper
  */
 @Mapper
 interface DeployHistoryMapper {
+	fun selectDeployHistory(page: Int, pageCount: Int)
+	fun insertDeployHistory(deployHistory: DeployHistory)
+	fun updateDeployHistory(id: Int, deployState: DeployState)
 }

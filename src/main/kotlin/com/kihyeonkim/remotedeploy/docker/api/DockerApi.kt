@@ -56,8 +56,11 @@ class DockerApi(
 	}
 
 	fun startJenkinsContainer() {
-		val jenkinsFindList = dockerClient.listContainersCmd().withNameFilter(listOf(jenkinsContainerName)).exec()
-		if (jenkinsFindList.size > 0) {
+		val jenkinsFindList =
+			dockerClient.listContainersCmd().withNameFilter(listOf(jenkinsContainerName)).withShowAll(true).exec()
+
+		if ((jenkinsFindList.size == 1 && jenkinsFindList[0].state == "exited")) {
+			dockerClient.startContainerCmd(jenkinsFindList[0].id).exec()
 			return;
 		}
 

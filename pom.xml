@@ -86,6 +86,19 @@
             <artifactId>freemarker-gae</artifactId>
             <version>2.3.31</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.docker-java/docker-java -->
+        <dependency>
+            <groupId>com.github.docker-java</groupId>
+            <artifactId>docker-java</artifactId>
+            <version>3.2.11</version>
+        </dependency>
+        <!--com.github.docker-java 내에 socpe가 test로만 들어있어 작동되지 않아 의존성 추가-->
+        <!-- https://mvnrepository.com/artifact/com.github.docker-java/docker-java-transport-httpclient5 -->
+        <dependency>
+            <groupId>com.github.docker-java</groupId>
+            <artifactId>docker-java-transport-httpclient5</artifactId>
+            <version>3.2.11</version>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>

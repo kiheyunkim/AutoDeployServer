@@ -25,7 +25,6 @@ class DeployController(private val deployService: DeployService) {
 	@PostMapping("/create")
 	@ResponseBody
 	fun postCreateJenkinsJob(jobName: String, gitUrl: String, builderType: String): DeployResponse<*> {
-
 		val buildType: BuildType = BuildType.valueOf(builderType);
 
 		return deployService.createJenkinsJob(jobName, gitUrl, buildType)
@@ -44,7 +43,7 @@ class DeployController(private val deployService: DeployService) {
 	}
 
 	@GetMapping("/deployProgress")
-	@ResponseBody
+	@ResponseBody   //ToDo: 소켓으로 바꾸는 것 고려
 	fun getDeployProgress(jobName: String, jobNumber: Int, start: Int?): DeployResponse<*> {
 		return deployService.getDeployProgress(jobName, jobNumber, start)
 	}

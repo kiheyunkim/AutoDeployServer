@@ -28,7 +28,7 @@
 		OFFSET ((#{page} - 1) * #{pageCount})
 	</select>
 
-	<insert id="insertDeployHistory" parameterType="deployHistory">
+	<insert id="insertDeployHistory" parameterType="hashMap">
 		INSERT INTO DEPLOY_HISTORY(DEPLOY_STAGE,
 								   DEPLOY_STATE,
 								   SCENARIO_NAME,

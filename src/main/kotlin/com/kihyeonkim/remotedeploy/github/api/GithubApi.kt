@@ -2,7 +2,9 @@ package com.kihyeonkim.remotedeploy.github.api
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.kihyeonkim.remotedeploy.github.model.BranchInfo
 import com.kihyeonkim.remotedeploy.github.model.RepositoryInfo
+import com.kihyeonkim.remotedeploy.repo.model.RepoInfo
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -20,19 +22,14 @@ import org.springframework.web.util.UriComponentsBuilder
  * Comment :
  */
 @Component
-class GithubApi(
-	@Value("\${github.accessToken}")
-	private var accessToken: String
-) {
+class GithubApi {
 	private val repositoryListApi = "https://api.github.com/user/repos"
-
 	private val repositoryBranchListApi: (String, String) -> String = { userName, repositoryName ->
 		"https://api.github.com/repos/${userName}/${repositoryName}/branches"
 	}
 
-	fun getRepositoryList(): ArrayList<RepositoryInfo> {
+	fun getRepositoryList(accessToken: String): ArrayList<RepositoryInfo> {
 		val restTemplate = RestTemplate()
-
 		val httpHeaders = HttpHeaders()
 		httpHeaders.contentType = MediaType(MediaType.APPLICATION_JSON, Charsets.UTF_8)
 
@@ -49,6 +46,28 @@ class GithubApi(
 		)
 
 		val itemType = object : TypeToken<ArrayList<RepositoryInfo>>() {}.type
+
+		return Gson().fromJson(responseEntity.body, itemType)
+	}
+
+	fun getRepositoryBranchList(repoInfo: RepoInfo, repositoryName: String) {
+		val restTemplate = RestTemplate()
+		val httpHeaders = HttpHeaders()
+		httpHeaders.contentType = MediaType(MediaType.APPLICATION_JSON, Charsets.UTF_8)
+		httpHeaders.add("Authorization", "token ${repoInfo.accessToken}")
+
+		println(repositoryBranchListApi(repoInfo.userName, repositoryName))
+		val uriComponents: UriComponents =
+			UriComponentsBuilder.fromHttpUrl(repositoryBranchListApi(repoInfo.userName, repositoryName)).build(false)
+
+		val responseEntity = restTemplate.exchange(
+			uriComponents.toUriString(),
+			HttpMethod.GET,
+			HttpEntity<String>(httpHeaders),
+			String::class.java
+		)
+
+		val itemType = object : TypeToken<ArrayList<BranchInfo>>() {}.type
 
 		return Gson().fromJson(responseEntity.body, itemType)
 	}

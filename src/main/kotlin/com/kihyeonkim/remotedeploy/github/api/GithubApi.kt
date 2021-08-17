@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.kihyeonkim.remotedeploy.github.model.BranchInfo
 import com.kihyeonkim.remotedeploy.github.model.RepositoryInfo
+import com.kihyeonkim.remotedeploy.repo.model.GithubKeySet
 import com.kihyeonkim.remotedeploy.repo.model.RepoInfo
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
@@ -50,15 +51,15 @@ class GithubApi {
 		return Gson().fromJson(responseEntity.body, itemType)
 	}
 
-	fun getRepositoryBranchList(repoInfo: RepoInfo, repositoryName: String) {
+	fun getRepositoryBranchList(githubKeySet: GithubKeySet, repositoryName: String) {
 		val restTemplate = RestTemplate()
 		val httpHeaders = HttpHeaders()
 		httpHeaders.contentType = MediaType(MediaType.APPLICATION_JSON, Charsets.UTF_8)
-		httpHeaders.add("Authorization", "token ${repoInfo.accessToken}")
+		httpHeaders.add("Authorization", "token ${githubKeySet.accessToken}")
 
-		println(repositoryBranchListApi(repoInfo.userName, repositoryName))
 		val uriComponents: UriComponents =
-			UriComponentsBuilder.fromHttpUrl(repositoryBranchListApi(repoInfo.userName, repositoryName)).build(false)
+			UriComponentsBuilder.fromHttpUrl(repositoryBranchListApi(githubKeySet.userName, repositoryName))
+				.build(false)
 
 		val responseEntity = restTemplate.exchange(
 			uriComponents.toUriString(),
@@ -71,5 +72,4 @@ class GithubApi {
 
 		return Gson().fromJson(responseEntity.body, itemType)
 	}
-
 }

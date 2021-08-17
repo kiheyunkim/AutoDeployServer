@@ -12,7 +12,7 @@ import org.apache.ibatis.annotations.Mapper
  */
 @Mapper
 interface DeployHistoryMapper {
-	fun selectDeployHistory(page: Int, pageCount: Int)
+	fun selectDeployHistory(page: Int, offset: Int)
 	fun insertDeployHistory(deployHistory: DeployHistory)
 	fun updateDeployHistory(id: Int, deployState: DeployState)
 }

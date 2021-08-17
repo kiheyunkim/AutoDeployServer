@@ -9,18 +9,18 @@
 
 	<select id="selectRepoAliasList" resultType="string">
 		SELECT REPO_ALIAS
-		FROM REPO_INFO
+		FROM GITHUB_INFO
 	</select>
 
 	<select id="selectRepoInfo" parameterType="hashMap" resultMap="gitHubKeySet">
 		SELECT USER_NAME,
 			   ACCESS_TOKEN
-		FROM REPO_INFO
+		FROM GITHUB_INFO
 		WHERE REPO_ALIAS = #{repoAlias}
 	</select>
 
 	<insert id="insertRepoInfo" parameterType="hashMap">
-		INSERT INTO REPO_INFO(REPO_ALIAS,
+		INSERT INTO GITHUB_INFO(REPO_ALIAS,
 							  USER_NAME,
 							  ACCESS_TOKEN)
 		VALUES (#{repoAlias},
@@ -29,7 +29,7 @@
 	</insert>
 
 	<update id="updateRepoInfo" parameterType="hashMap">
-		UPDATE REPO_INFO
+		UPDATE GITHUB_INFO
 		SET USER_NAME    = #{userName},
 			ACCESS_TOKEN = #{accessToken}
 		WHERE REPO_ALIAS = #{repoAlias}
@@ -37,7 +37,7 @@
 
 	<delete id="deleteRepoInfo" parameterType="hashMap">
 		DELETE
-		FROM REPO_INFO
+		FROM GITHUB_INFO
 		WHERE REPO_ALIAS = #{repoAlias}
 	</delete>
 </mapper>

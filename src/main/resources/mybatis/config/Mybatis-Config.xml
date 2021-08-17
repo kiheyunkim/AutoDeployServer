@@ -4,7 +4,8 @@
 		"http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
-	<typeAliases >
+	<typeAliases>
 		<typeAlias type="com.kihyeonkim.remotedeploy.deploy.model.DeployHistory" alias="deployHistory"/>
+		<typeAlias type="com.kihyeonkim.remotedeploy.repo.model.RepoInfo" alias="repoInfo"/>
 	</typeAliases>
 </configuration>

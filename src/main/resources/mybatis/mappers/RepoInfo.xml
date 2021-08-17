@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kihyeonkim.remotedeploy.repo.mapper.RepoInfoMapper">
+	<resultMap id="gitHubKeySet" type="com.kihyeonkim.remotedeploy.repo.model.GithubKeySet">
+		<result column="USER_NAME" property="userName"/>
+		<result column="ACCESS_TOKEN" property="accessToken"/>
+	</resultMap>
+
+	<select id="selectRepoAliasList" resultType="string">
+		SELECT REPO_ALIAS
+		FROM REPO_INFO
+	</select>
+
+	<select id="selectRepoInfo" parameterType="hashMap" resultMap="gitHubKeySet">
+		SELECT USER_NAME,
+			   ACCESS_TOKEN
+		FROM REPO_INFO
+		WHERE REPO_ALIAS = #{repoAlias}
+	</select>
+
+	<insert id="insertRepoInfo" parameterType="hashMap">
+		INSERT INTO REPO_INFO(REPO_ALIAS,
+							  USER_NAME,
+							  ACCESS_TOKEN)
+		VALUES (#{repoAlias},
+				#{userName},
+				#{accessToken})
+	</insert>
+
+	<update id="updateRepoInfo" parameterType="hashMap">
+		UPDATE REPO_INFO
+		SET USER_NAME    = #{userName},
+			ACCESS_TOKEN = #{accessToken}
+		WHERE REPO_ALIAS = #{repoAlias}
+	</update>
+
+	<delete id="deleteRepoInfo" parameterType="hashMap">
+		DELETE
+		FROM REPO_INFO
+		WHERE REPO_ALIAS = #{repoAlias}
+	</delete>
+</mapper>

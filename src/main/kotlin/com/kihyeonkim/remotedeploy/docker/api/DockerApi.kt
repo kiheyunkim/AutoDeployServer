@@ -25,6 +25,9 @@ class DockerApi(
 	@Value("\${jenkins.jenkinsHome}")
 	private var jenkinsHome: String,
 
+	@Value("\${ssh.home}")
+	private var sshHome: String,
+
 	@Value("\${jenkins.jenkinsPort}")
 	private var jenkinsPort: String,
 
@@ -72,7 +75,10 @@ class DockerApi(
 				PortBinding(Ports.Binding("127.0.0.1", "50000"), ExposedPort(50000))
 			)
 		).withBinds(
-			Binds(Bind(jenkinsHome, Volume("/var/jenkins_home")))
+			Binds(
+				Bind(jenkinsHome, Volume("/var/jenkins_home")),
+				Bind(sshHome, Volume("/var/jenkins_home/.ssh"))
+			),
 		)
 
 		val startContainerCmd =

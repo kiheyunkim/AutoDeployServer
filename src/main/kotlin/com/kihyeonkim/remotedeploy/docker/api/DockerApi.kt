@@ -25,7 +25,7 @@ class DockerApi(
 	@Value("\${jenkins.jenkinsHome}")
 	private var jenkinsHome: String,
 
-	@Value("\${ssh.home}")
+	@Value("\${ssh.sshHome}")
 	private var sshHome: String,
 
 	@Value("\${jenkins.jenkinsPort}")

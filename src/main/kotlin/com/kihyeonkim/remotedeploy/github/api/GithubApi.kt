@@ -94,12 +94,10 @@ class GithubApi {
 		val bytePrivateKey = ByteArrayOutputStream()
 		val bytePublicKey = ByteArrayOutputStream()
 
-		val keyPair: KeyPair = KeyPair.genKeyPair(JSch(), KeyPair.RSA, 2048)
-		keyPair.writePrivateKey(bytePrivateKey, "".toByteArray())
+		val jsch = JSch()
+		val keyPair: KeyPair = KeyPair.genKeyPair(jsch, KeyPair.RSA, 2048)
+		keyPair.writePrivateKey(bytePrivateKey)
 		keyPair.writePublicKey(bytePublicKey, "")
-
-		println(bytePrivateKey.toString())
-		println(bytePublicKey.toString())
 
 		return Pair(bytePrivateKey.toString(), bytePublicKey.toString())
 	}

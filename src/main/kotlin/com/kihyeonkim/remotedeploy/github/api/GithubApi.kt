@@ -24,7 +24,7 @@ import java.security.SecureRandom
  */
 @Component
 class GithubApi(
-	val deployKeyGenerator: DeployKeyGenerator
+	val deployKeyGenerator: SshKeyApi
 ) {
 	private val objectMapper: ObjectMapper = ObjectMapper()
 	private val repositoryListApi = "https://api.github.com/user/repos"

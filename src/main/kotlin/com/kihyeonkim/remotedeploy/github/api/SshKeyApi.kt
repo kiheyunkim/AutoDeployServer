@@ -2,6 +2,7 @@ package com.kihyeonkim.remotedeploy.github.api
 
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.KeyPair
+import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.io.ByteArrayOutputStream
@@ -17,7 +18,8 @@ import java.io.FileOutputStream
 @Component
 class SshKeyApi(
 	@Value("\${ssh.sshHome}")
-	private var sshHome: String
+	private var sshHome: String,
+	private var rabbitTemplate: RabbitTemplate
 ) {
 	fun saveRSAPrivateKeyAndGetPublicKey(keyName: String): String {
 		val bytePrivateKey = ByteArrayOutputStream()
@@ -28,6 +30,8 @@ class SshKeyApi(
 		generatedRSAKeySet.writePublicKey(bytePublicKey, "")
 
 		savePrivateKeyToDisk(keyName, bytePrivateKey)
+
+		rabbitTemplate.convertAndSend("sshConfig",)
 
 		return bytePublicKey.toString()
 	}

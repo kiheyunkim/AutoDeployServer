@@ -15,11 +15,10 @@ import java.io.FileOutputStream
  * Comment :
  */
 @Component
-class DeployKeyGenerator(
+class SshKeyApi(
 	@Value("\${ssh.sshHome}")
 	private var sshHome: String
 ) {
-
 	fun saveRSAPrivateKeyAndGetPublicKey(keyName: String): String {
 		val bytePrivateKey = ByteArrayOutputStream()
 		val bytePublicKey = ByteArrayOutputStream()

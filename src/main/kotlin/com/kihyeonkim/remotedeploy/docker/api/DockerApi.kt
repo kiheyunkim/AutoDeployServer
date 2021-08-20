@@ -25,6 +25,9 @@ class DockerApi(
 	@Value("\${jenkins.jenkinsHome}")
 	private var jenkinsHome: String,
 
+	@Value("\${ssh.sshHome}")
+	private var sshHome: String,
+
 	@Value("\${jenkins.jenkinsPort}")
 	private var jenkinsPort: String,
 
@@ -48,7 +51,6 @@ class DockerApi(
 	private val dockerClient: DockerClient = DockerClientImpl.getInstance(dockerClientConfig, httpClient)
 
 	fun pullJenkinsImage() {
-
 		dockerClient.pullImageCmd("jenkins/jenkins")
 			.withTag("alpine")
 			.exec(PullImageResultCallback())
@@ -59,8 +61,11 @@ class DockerApi(
 		val jenkinsFindList =
 			dockerClient.listContainersCmd().withNameFilter(listOf(jenkinsContainerName)).withShowAll(true).exec()
 
-		if ((jenkinsFindList.size == 1 && jenkinsFindList[0].state == "exited")) {
-			dockerClient.startContainerCmd(jenkinsFindList[0].id).exec()
+		if (jenkinsFindList.size == 1) {
+			if (jenkinsFindList[0].state == "exited") {
+				dockerClient.startContainerCmd(jenkinsFindList[0].id).exec()
+			}
+
 			return;
 		}
 
@@ -70,7 +75,10 @@ class DockerApi(
 				PortBinding(Ports.Binding("127.0.0.1", "50000"), ExposedPort(50000))
 			)
 		).withBinds(
-			Binds(Bind(jenkinsHome, Volume("/var/jenkins_home")))
+			Binds(
+				Bind(jenkinsHome, Volume("/var/jenkins_home")),
+				Bind(sshHome, Volume("/var/jenkins_home/.ssh"))
+			),
 		)
 
 		val startContainerCmd =

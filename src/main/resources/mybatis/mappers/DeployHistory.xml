@@ -25,7 +25,7 @@
 		FROM DEPLOY_HISTORY
 		ORDER BY ID
 		LIMIT #{pageCount}
-		OFFSET ((#{page} - 1) * #{pageCount})
+		OFFSET #{offset}
 	</select>
 
 	<insert id="insertDeployHistory" parameterType="hashMap">

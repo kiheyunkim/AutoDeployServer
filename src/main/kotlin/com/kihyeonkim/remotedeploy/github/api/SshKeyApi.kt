@@ -2,6 +2,8 @@ package com.kihyeonkim.remotedeploy.github.api
 
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.KeyPair
+import com.kihyeonkim.remotedeploy.common.enumeration.SshConfigMessageType
+import com.kihyeonkim.remotedeploy.common.model.SshConfigModel
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -31,7 +33,10 @@ class SshKeyApi(
 
 		savePrivateKeyToDisk(keyName, bytePrivateKey)
 
-		rabbitTemplate.convertAndSend("sshConfig",)
+		rabbitTemplate.convertAndSend(
+			"sshConfig",
+			SshConfigModel(SshConfigMessageType.ADD, "Github", "github.com", keyName)
+		)
 
 		return bytePublicKey.toString()
 	}

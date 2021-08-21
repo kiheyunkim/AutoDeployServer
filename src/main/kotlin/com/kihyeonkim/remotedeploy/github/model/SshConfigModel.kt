@@ -1,7 +1,4 @@
-package com.kihyeonkim.remotedeploy.common.model
-
-import com.kihyeonkim.remotedeploy.common.enumeration.SshConfigMessageType
-import java.io.Serializable
+package com.kihyeonkim.remotedeploy.github.model
 
 /**
  * IDE : IntelliJ IDEA
@@ -10,8 +7,7 @@ import java.io.Serializable
  * Comment :
  */
 data class SshConfigModel(
-	var sshConfigMessageType: SshConfigMessageType,
 	var host: String,
 	var hostName: String,
 	var identityFileName: String
-) : Serializable
+)

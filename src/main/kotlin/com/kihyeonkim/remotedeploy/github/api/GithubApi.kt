@@ -6,15 +6,11 @@ import com.google.gson.reflect.TypeToken
 import com.kihyeonkim.remotedeploy.github.model.BranchInfo
 import com.kihyeonkim.remotedeploy.github.model.RepositoryInfo
 import com.kihyeonkim.remotedeploy.repo.model.GithubKeySet
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
-import org.springframework.http.MediaType
+import org.springframework.http.*
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponents
 import org.springframework.web.util.UriComponentsBuilder
-import java.security.SecureRandom
 
 /**
  * IDE : IntelliJ IDEA
@@ -24,7 +20,7 @@ import java.security.SecureRandom
  */
 @Component
 class GithubApi(
-	val deployKeyGenerator: SshKeyApi
+	val sshKeyApi: SshKeyApi
 ) {
 	private val objectMapper: ObjectMapper = ObjectMapper()
 	private val repositoryListApi = "https://api.github.com/user/repos"
@@ -79,9 +75,9 @@ class GithubApi(
 		return Gson().fromJson(responseEntity.body, itemType)
 	}
 
-	fun addDeployKeyAndSSHKey(githubKeySet: GithubKeySet, repositoryName: String) {
+	fun addDeployKeyAndSSHKey(githubKeySet: GithubKeySet, repoAlias: String, repositoryName: String): Boolean {
 		val publicKey =
-			deployKeyGenerator.saveRSAPrivateKeyAndGetPublicKey(repositoryName.uppercase())
+			sshKeyApi.saveRSAPrivateKeyAndGetPublicKey(repoAlias, repositoryName)
 
 		val restTemplate = RestTemplate()
 		val httpHeaders = HttpHeaders()
@@ -94,11 +90,13 @@ class GithubApi(
 
 		val body = objectMapper.writeValueAsString(params)
 
-		restTemplate.exchange(
+		val responseEntity = restTemplate.exchange(
 			deployKeyRegisterApi(githubKeySet.userName, repositoryName),
 			HttpMethod.POST,
 			HttpEntity<String>(body, httpHeaders),
 			String::class.java
 		)
+
+		return responseEntity.statusCode == HttpStatus.CREATED
 	}
 }

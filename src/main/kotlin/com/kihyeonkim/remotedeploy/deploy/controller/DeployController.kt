@@ -24,10 +24,10 @@ class DeployController(private val deployService: DeployService) {
 
 	@PostMapping("/create")
 	@ResponseBody
-	fun postCreateJenkinsJob(jobName: String, gitUrl: String, builderType: String): DeployResponse<*> {
+	fun postCreateJenkinsJob(repoAlias: String, repositoryName: String, builderType: String): DeployResponse<*> {
 		val buildType: BuildType = BuildType.valueOf(builderType);
 
-		return deployService.createJenkinsJob(jobName, gitUrl, buildType)
+		return deployService.createDeployJob(repoAlias, repositoryName, buildType)
 	}
 
 	@PostMapping("/startBuild")

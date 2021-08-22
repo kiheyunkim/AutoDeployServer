@@ -11,9 +11,9 @@ import org.apache.ibatis.annotations.Mapper
  * Comment :
  */
 @Mapper
-interface RepoInfoMapper {
+interface GithubKeyMapper {
 	fun selectRepoAliasList(): List<String>
-	fun selectRepoInfo(repoAlias: String): GithubKeySet
+	fun selectRepoInfo(repoAlias: String): GithubKeySet?
 	fun insertRepoInfo(repoInfo: RepoInfo)
 	fun updateRepoInfo(repoInfo: RepoInfo)
 	fun deleteRepoInfo(repoAlias: String)

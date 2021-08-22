@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kihyeonkim.remotedeploy.github.repository.SshConfigRepository">
+	<resultMap id="deployHistory" type="com.kihyeonkim.remotedeploy.github.model.SshConfigModel">
+		<result column="HOST" property="host"/>
+		<result column="HOST_NAME" property="hostName"/>
+		<result column="IDENTITY_FILE_NAME" property="identityFileName"/>
+	</resultMap>
+
+	<select id="selectAllSshKeyInfo" parameterType="hashMap" resultMap="deployHistory">
+		SELECT HOST,
+			   HOST_NAME,
+			   IDENTITY_FILE_NAME
+		FROM SSH_CONFIG
+	</select>
+
+	<insert id="insertSshKeyInfo" parameterType="hashMap">
+		INSERT INTO SSH_CONFIG(HOST,
+							   HOST_NAME,
+							   IDENTITY_FILE_NAME)
+		VALUES (#{host},
+				#{hostName},
+				#{identityFileName})
+	</insert>
+
+	<delete id="deleteSshKeyInfo" parameterType="hashMap">
+		DELETE
+		FROM SSH_CONFIG
+		WHERE HOST_NAME = #{hostname}
+	</delete>
+</mapper>

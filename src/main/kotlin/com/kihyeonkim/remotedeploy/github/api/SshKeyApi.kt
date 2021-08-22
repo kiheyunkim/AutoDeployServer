@@ -3,12 +3,15 @@ package com.kihyeonkim.remotedeploy.github.api
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.KeyPair
 import com.kihyeonkim.remotedeploy.common.enumeration.SshConfigMessageType
-import com.kihyeonkim.remotedeploy.common.model.SshConfigModel
+import com.kihyeonkim.remotedeploy.common.model.SshConfigMessageModel
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.FileOutputStream
+import java.nio.file.Files
+import java.nio.file.attribute.PosixFilePermissions
 
 
 /**
@@ -23,7 +26,7 @@ class SshKeyApi(
 	private var sshHome: String,
 	private var rabbitTemplate: RabbitTemplate
 ) {
-	fun saveRSAPrivateKeyAndGetPublicKey(keyName: String): String {
+	fun saveRSAPrivateKeyAndGetPublicKey(repoAlias: String, repositoryName: String): String {
 		val bytePrivateKey = ByteArrayOutputStream()
 		val bytePublicKey = ByteArrayOutputStream()
 
@@ -31,18 +34,27 @@ class SshKeyApi(
 		generatedRSAKeySet.writePrivateKey(bytePrivateKey)
 		generatedRSAKeySet.writePublicKey(bytePublicKey, "")
 
-		savePrivateKeyToDisk(keyName, bytePrivateKey)
+		savePrivateKeyToDisk(repoAlias, keyName = repositoryName, bytePrivateKey)
 
 		rabbitTemplate.convertAndSend(
 			"sshConfig",
-			SshConfigModel(SshConfigMessageType.ADD, "Github", "github.com", keyName)
+			SshConfigMessageModel(
+				SshConfigMessageType.ADD,
+				"${repoAlias.uppercase()}_${repositoryName.uppercase()}",
+				"github.com",
+				"${repoAlias.uppercase()}_${repositoryName.uppercase()}"
+			)
 		)
+		println(bytePrivateKey.toString())
+		println(bytePublicKey.toString())
 
 		return bytePublicKey.toString()
 	}
 
-	private fun savePrivateKeyToDisk(keyName: String, bytePrivateKey: ByteArrayOutputStream) {
-		FileOutputStream("$sshHome/$keyName").use { outputStream -> bytePrivateKey.writeTo(outputStream) }
+	private fun savePrivateKeyToDisk(repoAlias: String, keyName: String, bytePrivateKey: ByteArrayOutputStream) {
+		FileOutputStream("$sshHome/${repoAlias.uppercase()}_${keyName.uppercase()}").use { outputStream -> bytePrivateKey.writeTo(outputStream) }
+		val file = File("$sshHome/${repoAlias.uppercase()}_${keyName.uppercase()}")
+		Files.setPosixFilePermissions(file.toPath(), PosixFilePermissions.fromString("rw-------"))
 	}
 
 	private fun generateRSAKeySet(): KeyPair {

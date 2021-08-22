@@ -9,7 +9,10 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.springframework.util.SerializationUtils
+import java.io.File
 import java.io.FileWriter
+import java.nio.file.Files
+import java.nio.file.attribute.PosixFilePermissions
 
 /**
  * IDE : IntelliJ IDEA
@@ -27,6 +30,7 @@ class SshConfigRabbitMQConsumer(
 	private val configTemplate: (String, String, String) -> String = { host, hostName, identityFileName ->
 		"""Host $host
 	HostName $hostName
+	StrictHostKeyChecking no
 	IdentityFile /var/jenkins_home/.ssh/$identityFileName
 
 """.trimIndent()
@@ -61,5 +65,8 @@ class SshConfigRabbitMQConsumer(
 		}
 
 		FileWriter("$sshHome/config").use { it.write(configStringBuilder.toString()) }
+
+		val file = File("$sshHome/config")
+		Files.setPosixFilePermissions(file.toPath(), PosixFilePermissions.fromString("rw-------"))
 	}
 }

@@ -45,8 +45,6 @@ class SshKeyApi(
 				"${repoAlias.uppercase()}_${repositoryName.uppercase()}"
 			)
 		)
-		println(bytePrivateKey.toString())
-		println(bytePublicKey.toString())
 
 		return bytePublicKey.toString()
 	}

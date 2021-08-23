@@ -30,16 +30,16 @@ class DeployController(private val deployService: DeployService) {
 		return deployService.createDeployJob(repoAlias, repositoryName, buildType)
 	}
 
+	@DeleteMapping("/delete")
+	@ResponseBody
+	fun deleteJenkinsJob(repoAlias: String, repositoryName: String): DeployResponse<*> {
+		return deployService.deleteJenkinsJob(repoAlias, repositoryName)
+	}
+
 	@PostMapping("/startBuild")
 	@ResponseBody
 	fun postStartJenkinsJob(jobName: String, params: Map<String, List<String>>?): DeployResponse<*> {
 		return deployService.startJenkinsJob(jobName, params)
-	}
-
-	@DeleteMapping("/delete")
-	@ResponseBody
-	fun deleteJenkinsJob(jobName: String): DeployResponse<*> {
-		return deployService.deleteJenkinsJob(jobName)
 	}
 
 	@GetMapping("/deployProgress")

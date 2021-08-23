@@ -13,5 +13,5 @@ import org.apache.ibatis.annotations.Mapper
 interface SshConfigRepository {
 	fun selectAllSshKeyInfo(): List<SshConfigModel>
 	fun insertSshKeyInfo(sshConfigModel: SshConfigModel)
-	fun deleteSshKeyInfo(hostname: String)
+	fun deleteSshKeyInfo(host: String)
 }

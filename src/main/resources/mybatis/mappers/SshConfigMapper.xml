@@ -27,6 +27,6 @@
 	<delete id="deleteSshKeyInfo" parameterType="hashMap">
 		DELETE
 		FROM SSH_CONFIG
-		WHERE HOST_NAME = #{hostname}
+		WHERE HOST = #{host}
 	</delete>
 </mapper>

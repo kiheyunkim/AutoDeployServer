@@ -27,10 +27,6 @@ class DeployService(
 		val githubKeySet = githubKeyMapper.selectRepoInfo(repoAlias)
 			?: return DeployResponse(false, null, "등록되지 않은 repoAlias")
 
-		if (!githubApi.addDeployKeyAndSSHKey(githubKeySet, repoAlias, repositoryName)) {
-			return DeployResponse(false, null, "SSH 키 등록 또는 생성 실패")
-		}
-
 		val createResult = jenkinsApi.createJenkinsJob(
 			"DEPLOY_${repoAlias.uppercase()}_${repositoryName.uppercase()}",
 			gitUrlTemplate(
@@ -45,21 +41,30 @@ class DeployService(
 			return DeployResponse(false, null, "Jenkins Job 생성 실패")
 		}
 
+		if (!githubApi.addDeployKeyAndSSHKey(githubKeySet, repoAlias, repositoryName)) {
+			return DeployResponse(false, null, "SSH 키 등록 또는 생성 실패")
+		}
+
 		return DeployResponse(createResult.value(), null, null)
 	}
 
-	fun startJenkinsJob(jobName: String, params: Map<String, List<String>>?): DeployResponse<*> {
-		return DeployResponse(jenkinsApi.startJenkinsJob(jobName, params))
+	fun deleteJenkinsJob(repoAlias: String, repositoryName: String): DeployResponse<*> {
+		val requestStatus = jenkinsApi.deleteJenkinsJob("DEPLOY_${repoAlias.uppercase()}_${repositoryName.uppercase()}")
+
+		if(!githubApi.removeSSHKey(repoAlias, repositoryName)){
+			return DeployResponse(requestStatus.value(), null, "sshKey 삭제 실패")
+		}
+
+		if (!requestStatus.value()) {
+			return DeployResponse(requestStatus.value(), null, "Jenkins 삭제 실패")
+		}
+
+		return DeployResponse(true, null, null)
 	}
 
-	fun deleteJenkinsJob(jobName: String): DeployResponse<*> {
-		val requestStatus = jenkinsApi.deleteJenkinsJob(jobName)
 
-		return if (requestStatus.value()) {
-			DeployResponse(requestStatus.value(), null, "Jenkins 삭제 실패")
-		} else {
-			DeployResponse(requestStatus.value())
-		}
+	fun startJenkinsJob(jobName: String, params: Map<String, List<String>>?): DeployResponse<*> {
+		return DeployResponse(jenkinsApi.startJenkinsJob(jobName, params))
 	}
 
 	fun getDeployProgress(jobName: String, jobNumber: Int, start: Int?): DeployResponse<*> {

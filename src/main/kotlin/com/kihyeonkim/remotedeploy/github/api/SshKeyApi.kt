@@ -49,8 +49,34 @@ class SshKeyApi(
 		return bytePublicKey.toString()
 	}
 
+	fun removeRSAPrivateKey(repoAlias: String, repositoryName: String): Boolean {
+
+		deletePrivateKeyFromDisk(repoAlias, keyName = repositoryName)
+
+		rabbitTemplate.convertAndSend(
+			"sshConfig",
+			SshConfigMessageModel(
+				SshConfigMessageType.DELETE,
+				"${repoAlias.uppercase()}_${repositoryName.uppercase()}",
+				"",
+				""
+			)
+		)
+
+		return true
+	}
+
+	private fun deletePrivateKeyFromDisk(repoAlias: String, keyName: String) {
+		val file = File("$sshHome/${repoAlias.uppercase()}_${keyName.uppercase()}")
+		file.delete()
+	}
+
 	private fun savePrivateKeyToDisk(repoAlias: String, keyName: String, bytePrivateKey: ByteArrayOutputStream) {
-		FileOutputStream("$sshHome/${repoAlias.uppercase()}_${keyName.uppercase()}").use { outputStream -> bytePrivateKey.writeTo(outputStream) }
+		FileOutputStream("$sshHome/${repoAlias.uppercase()}_${keyName.uppercase()}").use { outputStream ->
+			bytePrivateKey.writeTo(
+				outputStream
+			)
+		}
 		val file = File("$sshHome/${repoAlias.uppercase()}_${keyName.uppercase()}")
 		Files.setPosixFilePermissions(file.toPath(), PosixFilePermissions.fromString("rw-------"))
 	}

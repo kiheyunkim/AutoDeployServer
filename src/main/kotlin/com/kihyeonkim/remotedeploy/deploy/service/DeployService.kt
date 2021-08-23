@@ -27,10 +27,6 @@ class DeployService(
 		val githubKeySet = githubKeyMapper.selectRepoInfo(repoAlias)
 			?: return DeployResponse(false, null, "등록되지 않은 repoAlias")
 
-		if (!githubApi.addDeployKeyAndSSHKey(githubKeySet, repoAlias, repositoryName)) {
-			return DeployResponse(false, null, "SSH 키 등록 또는 생성 실패")
-		}
-
 		val createResult = jenkinsApi.createJenkinsJob(
 			"DEPLOY_${repoAlias.uppercase()}_${repositoryName.uppercase()}",
 			gitUrlTemplate(
@@ -43,6 +39,10 @@ class DeployService(
 
 		if (!createResult.value()) {
 			return DeployResponse(false, null, "Jenkins Job 생성 실패")
+		}
+
+		if (!githubApi.addDeployKeyAndSSHKey(githubKeySet, repoAlias, repositoryName)) {
+			return DeployResponse(false, null, "SSH 키 등록 또는 생성 실패")
 		}
 
 		return DeployResponse(createResult.value(), null, null)

@@ -49,7 +49,7 @@ class SshConfigRabbitMQConsumer(
 					deserializedObject.identityFileName
 				)
 			)
-			SshConfigMessageType.DELETE -> sshConfigRepository.deleteSshKeyInfo("")
+			SshConfigMessageType.DELETE -> sshConfigRepository.deleteSshKeyInfo(deserializedObject.host)
 		}
 
 		val sshKeyInfos = sshConfigRepository.selectAllSshKeyInfo()

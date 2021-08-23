@@ -48,18 +48,23 @@ class DeployService(
 		return DeployResponse(createResult.value(), null, null)
 	}
 
-	fun startJenkinsJob(jobName: String, params: Map<String, List<String>>?): DeployResponse<*> {
-		return DeployResponse(jenkinsApi.startJenkinsJob(jobName, params))
+	fun deleteJenkinsJob(repoAlias: String, repositoryName: String): DeployResponse<*> {
+		val requestStatus = jenkinsApi.deleteJenkinsJob("DEPLOY_${repoAlias.uppercase()}_${repositoryName.uppercase()}")
+
+		if(!githubApi.removeSSHKey(repoAlias, repositoryName)){
+			return DeployResponse(requestStatus.value(), null, "sshKey 삭제 실패")
+		}
+
+		if (!requestStatus.value()) {
+			return DeployResponse(requestStatus.value(), null, "Jenkins 삭제 실패")
+		}
+
+		return DeployResponse(true, null, null)
 	}
 
-	fun deleteJenkinsJob(jobName: String): DeployResponse<*> {
-		val requestStatus = jenkinsApi.deleteJenkinsJob(jobName)
 
-		return if (requestStatus.value()) {
-			DeployResponse(requestStatus.value(), null, "Jenkins 삭제 실패")
-		} else {
-			DeployResponse(requestStatus.value())
-		}
+	fun startJenkinsJob(jobName: String, params: Map<String, List<String>>?): DeployResponse<*> {
+		return DeployResponse(jenkinsApi.startJenkinsJob(jobName, params))
 	}
 
 	fun getDeployProgress(jobName: String, jobNumber: Int, start: Int?): DeployResponse<*> {

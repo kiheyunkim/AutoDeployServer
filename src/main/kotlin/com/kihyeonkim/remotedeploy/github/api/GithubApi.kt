@@ -99,4 +99,9 @@ class GithubApi(
 
 		return responseEntity.statusCode == HttpStatus.CREATED
 	}
+
+	//ToDo: deploy Key 삭제 로직 가능하면 추가.
+	fun removeSSHKey(repoAlias: String, repositoryName: String): Boolean {
+		return sshKeyApi.removeRSAPrivateKey(repoAlias, repositoryName)
+	}
 }

@@ -1,6 +1,7 @@
 package com.kihyeonkim.remotedeploy.deploy.service
 
 import com.kihyeonkim.remotedeploy.common.response.DeployResponse
+import com.kihyeonkim.remotedeploy.deploy.enumeration.ScmType
 import com.kihyeonkim.remotedeploy.deploy.mapper.ScmInfoMapper
 import com.kihyeonkim.remotedeploy.deploy.model.ScmInfoModel
 import com.kihyeonkim.remotedeploy.deploy.vo.ScmInfoVo
@@ -27,7 +28,7 @@ class SCMService(
 		if (StringUtils.isBlank(scmInfoVo.scmType) ||
 			StringUtils.isBlank(scmInfoVo.userName) ||
 			StringUtils.isBlank(scmInfoVo.repoAlias) ||
-			StringUtils.isBlank(scmInfoVo.apiKey)
+			StringUtils.isBlank(scmInfoVo.personalAccessToken)
 		) {
 			return DeployResponse(false, null, "값이 누락되었습니다")
 		}
@@ -36,17 +37,24 @@ class SCMService(
 			return DeployResponse(false, null, "이미 존재하는 repoAlias입니다.")
 		}
 
-		val validationResult = githubApi.checkApiKeyValidation(scmInfoVo.apiKey!!)
+		val validationResult = githubApi.checkApiKeyValidation(scmInfoVo.personalAccessToken!!)
 		if (!validationResult) {
 			return DeployResponse(false, null, "잘못된 api 키 입니다.")
 		}
 
+
+		val scmType = try {
+			ScmType.valueOf(scmInfoVo.scmType!!)
+		} catch (illegalArgumentException: IllegalArgumentException) {
+			return DeployResponse(false, null, "잘못된 scm 타입입니다")
+		}
+
 		scmInfoMapper.insertScmInfo(
 			ScmInfoModel(
-				scmInfoVo.scmType!!,
+				scmType,
 				scmInfoVo.repoAlias!!,
 				scmInfoVo.userName!!,
-				scmInfoVo.apiKey!!
+				scmInfoVo.personalAccessToken!!
 			)
 		)
 
@@ -58,14 +66,23 @@ class SCMService(
 			return DeployResponse(false, null, "repoAlias값이 비었습니다.")
 		}
 
-		if (StringUtils.isNotBlank(scmInfoVo.apiKey)) {
-			val validationResult = githubApi.checkApiKeyValidation(scmInfoVo.apiKey!!)
+		if (StringUtils.isNotBlank(scmInfoVo.personalAccessToken)) {
+			val validationResult = githubApi.checkApiKeyValidation(scmInfoVo.personalAccessToken!!)
 			if (!validationResult) {
 				return DeployResponse(false, null, "잘못된 api 키 입니다.")
 			}
 		}
 
-		scmInfoMapper.modifyScmInfoList(scmInfoVo)
+		var scmType: ScmType? = null
+		if (StringUtils.isNotBlank(scmInfoVo.scmType)) {
+			scmType = try {
+				ScmType.valueOf(scmInfoVo.scmType!!)
+			} catch (illegalArgumentException: IllegalArgumentException) {
+				return DeployResponse(false, null, "잘못된 scm 타입입니다")
+			}
+		}
+
+		scmInfoMapper.updateScmInfo(scmInfoVo.repoAlias!!, scmType, scmInfoVo.userName, scmInfoVo.personalAccessToken)
 
 		return DeployResponse(true)
 	}

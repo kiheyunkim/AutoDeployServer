@@ -17,16 +17,21 @@ class SCMService(private val scmInfoMapper: ScmInfoMapper) {
 		return DeployResponse(scmInfoMapper.selectScmInfoList())
 	}
 
-	fun addSCMInfoList(scmModel: ScmModel) {
-		//ToDo: 검증로직
+	fun addSCMInfoList(scmModel: ScmModel): DeployResponse<*> {
 		scmInfoMapper.insertScmInfo(scmModel)
+
+		return DeployResponse(true)
 	}
 
-	fun modifySCMInfo(scmModel: ScmModel) {
+	fun modifySCMInfo(scmModel: ScmModel): DeployResponse<*> {
 		scmInfoMapper.modifyScmInfoList(scmModel)
+
+		return DeployResponse(true)
 	}
 
-	fun deleteSCMInfo(repoAlias: String) {
+	fun deleteSCMInfo(repoAlias: String): DeployResponse<*> {
 		scmInfoMapper.deleteScmInfo(repoAlias)
+
+		return DeployResponse(true)
 	}
 }

@@ -1,4 +1,4 @@
-package com.kihyeonkim.remotedeploy.repo.model
+package com.kihyeonkim.remotedeploy.deploy.model
 
 /**
  * IDE : IntelliJ IDEA
@@ -6,4 +6,4 @@ package com.kihyeonkim.remotedeploy.repo.model
  * GitHub : http://github.com/kiheyunkim
  * Comment :
  */
-data class GithubKeySet(var userName: String, var accessToken: String)
+data class GithubKeySetModel(var userName: String, var accessToken: String)

@@ -2,11 +2,11 @@ package com.kihyeonkim.remotedeploy.deploy.model
 
 /**
  * IDE : IntelliJ IDEA
- * Created by kiheyunkim@gmail.com on 2021-08-25
+ * Created by kiheyunkim@gmail.com on 2021-08-26
  * GitHub : http://github.com/kiheyunkim
  * Comment :
  */
-data class ScmModel(
+data class ScmInfoModel(
 	var scmType: String,
 	var repoAlias: String,
 	var userName: String,

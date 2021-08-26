@@ -100,6 +100,25 @@ class GithubApi(
 		return responseEntity.statusCode == HttpStatus.CREATED
 	}
 
+	fun checkApiKeyValidation(accessToken: String): Boolean {
+		val restTemplate = RestTemplate()
+		val httpHeaders = HttpHeaders()
+		httpHeaders.contentType = MediaType(MediaType.APPLICATION_JSON, Charsets.UTF_8)
+
+		val uriComponents: UriComponents = UriComponentsBuilder.fromHttpUrl(repositoryListApi)
+			.queryParam("access_token", accessToken)
+			.build(false)
+
+		val responseEntity = restTemplate.exchange(
+			uriComponents.toUriString(),
+			HttpMethod.GET,
+			HttpEntity<String>(httpHeaders),
+			String::class.java
+		)
+
+		return responseEntity.statusCode == HttpStatus.OK
+	}
+
 	//ToDo: deploy Key 삭제 로직 가능하면 추가.
 	fun removeSSHKey(repoAlias: String, repositoryName: String): Boolean {
 		return sshKeyApi.removeRSAPrivateKey(repoAlias, repositoryName)

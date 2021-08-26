@@ -1,8 +1,8 @@
 package com.kihyeonkim.remotedeploy.deploy.controller
 
 import com.kihyeonkim.remotedeploy.common.response.DeployResponse
-import com.kihyeonkim.remotedeploy.deploy.model.ScmModel
 import com.kihyeonkim.remotedeploy.deploy.service.SCMService
+import com.kihyeonkim.remotedeploy.deploy.vo.ScmInfoVo
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -23,13 +23,13 @@ class SCMController(private val scmService: SCMService) {
 	}
 
 	@PostMapping("/add")
-	fun postGithubApi(scmModel: ScmModel): DeployResponse<*> {
-		return scmService.addSCMInfoList(scmModel)
+	fun postGithubApi(scmInfoVo: ScmInfoVo): DeployResponse<*> {
+		return scmService.addSCMInfoList(scmInfoVo)
 	}
 
 	@PostMapping("/modify")
-	fun postModifyGithubApi(scmModel: ScmModel): DeployResponse<*> {
-		return scmService.modifySCMInfo(scmModel)
+	fun postModifyGithubApi(scmInfoVo: ScmInfoVo): DeployResponse<*> {
+		return scmService.modifySCMInfo(scmInfoVo)
 	}
 
 	@PostMapping("/delete")

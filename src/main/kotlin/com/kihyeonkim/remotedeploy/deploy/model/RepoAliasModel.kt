@@ -8,9 +8,8 @@ import com.kihyeonkim.remotedeploy.deploy.enumeration.ScmType
  * GitHub : http://github.com/kiheyunkim
  * Comment :
  */
-data class ScmInfoModel(
+data class RepoAliasModel(
 	var scmType: ScmType,
 	var repoAlias: String,
-	var userName: String,
-	var personalAccessToken: String,
+	var userName: String
 )

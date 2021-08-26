@@ -2,6 +2,7 @@ package com.kihyeonkim.remotedeploy.deploy.mapper
 
 import com.kihyeonkim.remotedeploy.deploy.model.ScmInfoModel
 import com.kihyeonkim.remotedeploy.deploy.vo.ScmInfoVo
+import com.kihyeonkim.remotedeploy.repo.model.GithubKeySet
 import org.apache.ibatis.annotations.Mapper
 
 /**
@@ -13,8 +14,9 @@ import org.apache.ibatis.annotations.Mapper
 @Mapper
 interface ScmInfoMapper {
 	fun selectScmInfoList(): List<ScmInfoModel>
+	fun selectScmKeySet(repoAlias: String): GithubKeySet?
 	fun insertScmInfo(scmInfoModel: ScmInfoModel)
-	fun modifyScmInfoList(scmInfoVo: ScmInfoVo)
+	fun updateScmInfo(scmInfoVo: ScmInfoVo)
 	fun deleteScmInfo(repoAlias: String)
 	fun selectRepoAliasExist(repoAlias: String): Boolean
 }

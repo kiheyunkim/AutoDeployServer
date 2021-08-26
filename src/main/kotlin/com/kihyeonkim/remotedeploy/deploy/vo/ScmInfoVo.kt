@@ -10,5 +10,5 @@ data class ScmInfoVo(
 	var scmType: String?,
 	var repoAlias: String?,
 	var userName: String?,
-	var apiKey: String?,
+	var personalAccessToken: String?,
 )

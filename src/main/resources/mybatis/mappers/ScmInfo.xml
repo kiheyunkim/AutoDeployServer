@@ -55,4 +55,12 @@
 		FROM SCM_INFO
 		WHERE REPO_ALIAS = #{repoAlias}
 	</delete>
+
+	<select id="selectRepoAliasExist" parameterType="hashMap" resultType="boolean">
+		SELECT EXISTS(
+					   SELECT 1
+					   FROM SCM_INFO
+					   WHERE REPO_ALIAS = #{repoAlias}
+				   )
+	</select>
 </mapper>

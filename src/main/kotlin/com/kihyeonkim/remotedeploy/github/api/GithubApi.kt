@@ -5,7 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.kihyeonkim.remotedeploy.github.model.BranchInfo
 import com.kihyeonkim.remotedeploy.github.model.RepositoryInfo
-import com.kihyeonkim.remotedeploy.repo.model.GithubKeySet
+import com.kihyeonkim.remotedeploy.deploy.model.GithubKeySetModel
 import org.springframework.http.*
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
@@ -53,14 +53,14 @@ class GithubApi(
 		return Gson().fromJson(responseEntity.body, itemType)
 	}
 
-	fun getRepositoryBranchList(githubKeySet: GithubKeySet, repositoryName: String) {
+	fun getRepositoryBranchList(githubKeySetModel: GithubKeySetModel, repositoryName: String) {
 		val restTemplate = RestTemplate()
 		val httpHeaders = HttpHeaders()
 		httpHeaders.contentType = MediaType(MediaType.APPLICATION_JSON, Charsets.UTF_8)
-		httpHeaders.add("Authorization", "token ${githubKeySet.accessToken}")
+		httpHeaders.add("Authorization", "token ${githubKeySetModel.accessToken}")
 
 		val uriComponents: UriComponents =
-			UriComponentsBuilder.fromHttpUrl(repositoryBranchListApi(githubKeySet.userName, repositoryName))
+			UriComponentsBuilder.fromHttpUrl(repositoryBranchListApi(githubKeySetModel.userName, repositoryName))
 				.build(false)
 
 		val responseEntity = restTemplate.exchange(
@@ -75,14 +75,14 @@ class GithubApi(
 		return Gson().fromJson(responseEntity.body, itemType)
 	}
 
-	fun addDeployKeyAndSSHKey(githubKeySet: GithubKeySet, repoAlias: String, repositoryName: String): Boolean {
+	fun addDeployKeyAndSSHKey(githubKeySetModel: GithubKeySetModel, repoAlias: String, repositoryName: String): Boolean {
 		val publicKey =
 			sshKeyApi.saveRSAPrivateKeyAndGetPublicKey(repoAlias, repositoryName)
 
 		val restTemplate = RestTemplate()
 		val httpHeaders = HttpHeaders()
 		httpHeaders.contentType = MediaType(MediaType.APPLICATION_JSON, Charsets.UTF_8)
-		httpHeaders.add("Authorization", "token ${githubKeySet.accessToken}")
+		httpHeaders.add("Authorization", "token ${githubKeySetModel.accessToken}")
 
 		val params = HashMap<String, String>()
 		params["title"] = "${repositoryName.uppercase()}_DEPLOY"
@@ -91,13 +91,32 @@ class GithubApi(
 		val body = objectMapper.writeValueAsString(params)
 
 		val responseEntity = restTemplate.exchange(
-			deployKeyRegisterApi(githubKeySet.userName, repositoryName),
+			deployKeyRegisterApi(githubKeySetModel.userName, repositoryName),
 			HttpMethod.POST,
 			HttpEntity<String>(body, httpHeaders),
 			String::class.java
 		)
 
 		return responseEntity.statusCode == HttpStatus.CREATED
+	}
+
+	fun checkApiKeyValidation(accessToken: String): Boolean {
+		val restTemplate = RestTemplate()
+		val httpHeaders = HttpHeaders()
+		httpHeaders.contentType = MediaType(MediaType.APPLICATION_JSON, Charsets.UTF_8)
+
+		val uriComponents: UriComponents = UriComponentsBuilder.fromHttpUrl(repositoryListApi)
+			.queryParam("access_token", accessToken)
+			.build(false)
+
+		val responseEntity = restTemplate.exchange(
+			uriComponents.toUriString(),
+			HttpMethod.GET,
+			HttpEntity<String>(httpHeaders),
+			String::class.java
+		)
+
+		return responseEntity.statusCode == HttpStatus.OK
 	}
 
 	//ToDo: deploy Key 삭제 로직 가능하면 추가.

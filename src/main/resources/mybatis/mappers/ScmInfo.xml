@@ -41,10 +41,10 @@
 	<update id="updateScmInfo" parameterType="hashMap">
 		UPDATE SCM_INFO
 		<set>
-			<if test="scmType != null">SCM_TYPE=#{scmType}</if>
-			<if test="@org.apache.commons.lang.StringUtils@isBlank(userName)">USER_NAME=#{userName}</if>
+			<if test="scmType != null">SCM_TYPE=#{scmType},</if>
+			<if test="@org.apache.commons.lang.StringUtils@isBlank(userName)">USER_NAME=#{userName},</if>
 			<if test="@org.apache.commons.lang.StringUtils@isBlank(personalAccessToken)">
-				PERSONAL_ACCESS_TOKEN=#{personalAccessToken}
+				PERSONAL_ACCESS_TOKEN=#{personalAccessToken},
 			</if>
 		</set>
 		WHERE REPO_ALIAS = #{repoAlias}

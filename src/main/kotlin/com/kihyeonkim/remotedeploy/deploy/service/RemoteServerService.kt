@@ -16,10 +16,19 @@ import java.util.regex.Pattern
  */
 @Service
 class RemoteServerService(private val remoteServerMapper: RemoteServerMapper) {
-	fun getRemoteServerList(remoteServerAlias: String): DeployResponse<*> {
-		val selectRemoteServerList = remoteServerMapper.selectRemoteServerPublicKey(remoteServerAlias)
+	fun getRemoteServerList(): DeployResponse<*> {
 
-		return DeployResponse(selectRemoteServerList)
+		return DeployResponse(remoteServerMapper.selectRemoteServerInfoList())
+	}
+
+	fun getRemoteServerConnectionInfo(remoteServerAlias: String): DeployResponse<*> {
+		val queryResult = remoteServerMapper.selectRemoteServerConnectionInfo(remoteServerAlias)
+
+		return if (queryResult == null) {
+			DeployResponse(queryResult)
+		} else {
+			DeployResponse(false, null, "존재하지 않는 remoteServerAlias입니다")
+		}
 	}
 
 	fun addRemoteServeInfo(remoteServerInfoVo: RemoteServerInfoVo): DeployResponse<*> {

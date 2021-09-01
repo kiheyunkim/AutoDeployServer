@@ -24,7 +24,7 @@ class SCMService(
 		return DeployResponse(scmInfoMapper.selectScmInfoList())
 	}
 
-	fun addSCMInfoList(scmInfoVo: ScmInfoVo): DeployResponse<*> {
+	fun addSCMInfo(scmInfoVo: ScmInfoVo): DeployResponse<*> {
 		if (StringUtils.isBlank(scmInfoVo.scmType) ||
 			StringUtils.isBlank(scmInfoVo.userName) ||
 			StringUtils.isBlank(scmInfoVo.repoAlias) ||

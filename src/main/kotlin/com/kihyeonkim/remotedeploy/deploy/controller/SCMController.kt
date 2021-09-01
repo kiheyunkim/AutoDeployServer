@@ -24,7 +24,7 @@ class SCMController(private val scmService: SCMService) {
 
 	@PostMapping("/add")
 	fun postGithubApi(scmInfoVo: ScmInfoVo): DeployResponse<*> {
-		return scmService.addSCMInfoList(scmInfoVo)
+		return scmService.addSCMInfo(scmInfoVo)
 	}
 
 	@PostMapping("/modify")

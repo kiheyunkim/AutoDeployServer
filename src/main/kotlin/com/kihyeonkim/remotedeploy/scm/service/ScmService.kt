@@ -5,7 +5,7 @@ import com.kihyeonkim.remotedeploy.scm.enumeration.ScmType
 import com.kihyeonkim.remotedeploy.scm.mapper.ScmInfoMapper
 import com.kihyeonkim.remotedeploy.scm.model.ScmInfoModel
 import com.kihyeonkim.remotedeploy.scm.vo.ScmInfoVo
-import com.kihyeonkim.remotedeploy.github.api.GithubApi
+import com.kihyeonkim.remotedeploy.apis.github.api.GithubApi
 import org.apache.commons.lang.StringUtils
 import org.springframework.stereotype.Service
 

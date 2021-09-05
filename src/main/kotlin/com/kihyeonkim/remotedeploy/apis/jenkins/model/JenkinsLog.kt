@@ -1,4 +1,4 @@
-package com.kihyeonkim.remotedeploy.jenkins.model
+package com.kihyeonkim.remotedeploy.apis.jenkins.model
 
 /**
  * IDE : IntelliJ IDEA

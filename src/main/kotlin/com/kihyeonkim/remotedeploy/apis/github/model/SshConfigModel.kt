@@ -1,4 +1,4 @@
-package com.kihyeonkim.remotedeploy.github.model
+package com.kihyeonkim.remotedeploy.apis.github.model
 
 /**
  * IDE : IntelliJ IDEA

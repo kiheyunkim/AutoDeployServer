@@ -1,10 +1,9 @@
-package com.kihyeonkim.remotedeploy.jenkins.api
+package com.kihyeonkim.remotedeploy.apis.jenkins.api
 
 import com.cdancy.jenkins.rest.JenkinsClient
 import com.cdancy.jenkins.rest.domain.common.RequestStatus
-import com.kihyeonkim.remotedeploy.common.response.DeployResponse
-import com.kihyeonkim.remotedeploy.jenkins.enumeration.BuildType
-import com.kihyeonkim.remotedeploy.jenkins.model.JenkinsLog
+import com.kihyeonkim.remotedeploy.apis.jenkins.enumeration.BuildType
+import com.kihyeonkim.remotedeploy.apis.jenkins.model.JenkinsLog
 import org.apache.commons.io.IOUtils
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.ClassPathResource

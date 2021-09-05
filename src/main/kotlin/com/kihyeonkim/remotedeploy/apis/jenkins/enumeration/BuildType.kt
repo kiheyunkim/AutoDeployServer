@@ -1,4 +1,4 @@
-package com.kihyeonkim.remotedeploy.jenkins.enumeration
+package com.kihyeonkim.remotedeploy.apis.jenkins.enumeration
 
 /**
  * IDE : IntelliJ IDEA

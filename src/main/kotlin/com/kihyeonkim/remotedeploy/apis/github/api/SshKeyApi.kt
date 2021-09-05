@@ -1,4 +1,4 @@
-package com.kihyeonkim.remotedeploy.github.api
+package com.kihyeonkim.remotedeploy.apis.github.api
 
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.KeyPair

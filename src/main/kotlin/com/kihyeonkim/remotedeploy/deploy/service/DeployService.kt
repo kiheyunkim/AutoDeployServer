@@ -1,9 +1,9 @@
 package com.kihyeonkim.remotedeploy.deploy.service
 
 import com.kihyeonkim.remotedeploy.common.response.DeployResponse
-import com.kihyeonkim.remotedeploy.github.api.GithubApi
-import com.kihyeonkim.remotedeploy.jenkins.api.JenkinsApi
-import com.kihyeonkim.remotedeploy.jenkins.enumeration.BuildType
+import com.kihyeonkim.remotedeploy.apis.github.api.GithubApi
+import com.kihyeonkim.remotedeploy.apis.jenkins.api.JenkinsApi
+import com.kihyeonkim.remotedeploy.apis.jenkins.enumeration.BuildType
 import com.kihyeonkim.remotedeploy.repo.mapper.GithubKeyMapper
 import org.springframework.stereotype.Service
 

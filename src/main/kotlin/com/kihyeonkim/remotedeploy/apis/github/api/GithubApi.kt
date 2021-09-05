@@ -1,10 +1,10 @@
-package com.kihyeonkim.remotedeploy.github.api
+package com.kihyeonkim.remotedeploy.apis.github.api
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.kihyeonkim.remotedeploy.github.model.BranchInfo
-import com.kihyeonkim.remotedeploy.github.model.RepositoryInfo
+import com.kihyeonkim.remotedeploy.apis.github.model.BranchInfo
+import com.kihyeonkim.remotedeploy.apis.github.model.RepositoryInfo
 import com.kihyeonkim.remotedeploy.deploy.model.GithubKeySetModel
 import org.springframework.http.*
 import org.springframework.stereotype.Component

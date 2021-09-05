@@ -3,8 +3,7 @@ package com.kihyeonkim.remotedeploy.deploy.controller
 
 import com.kihyeonkim.remotedeploy.common.response.DeployResponse
 import com.kihyeonkim.remotedeploy.deploy.service.DeployService
-import com.kihyeonkim.remotedeploy.jenkins.api.JenkinsApi
-import com.kihyeonkim.remotedeploy.jenkins.enumeration.BuildType
+import com.kihyeonkim.remotedeploy.apis.jenkins.enumeration.BuildType
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 

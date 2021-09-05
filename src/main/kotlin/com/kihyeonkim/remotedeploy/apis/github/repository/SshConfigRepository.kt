@@ -1,6 +1,6 @@
-package com.kihyeonkim.remotedeploy.github.repository
+package com.kihyeonkim.remotedeploy.apis.github.repository
 
-import com.kihyeonkim.remotedeploy.github.model.SshConfigModel
+import com.kihyeonkim.remotedeploy.apis.github.model.SshConfigModel
 import org.apache.ibatis.annotations.Mapper
 
 /**

@@ -1,4 +1,4 @@
-package com.kihyeonkim.remotedeploy.deploy.model
+package com.kihyeonkim.remotedeploy.remoteserver.mdoel
 
 /**
  * IDE : IntelliJ IDEA
@@ -6,7 +6,7 @@ package com.kihyeonkim.remotedeploy.deploy.model
  * GitHub : http://github.com/kiheyunkim
  * Comment :
  */
-data class RemoteServerConnectionInfo(
+data class RemoteServerInfoModel(
+	var remoteServerAlias: String,
 	var remoteIp: String,
-	var publicKey: String
 )

@@ -1,9 +1,9 @@
-package com.kihyeonkim.remotedeploy.deploy.service
+package com.kihyeonkim.remotedeploy.remoteserver.service
 
 import com.kihyeonkim.remotedeploy.common.response.DeployResponse
-import com.kihyeonkim.remotedeploy.deploy.mapper.RemoteServerMapper
-import com.kihyeonkim.remotedeploy.deploy.model.RemoteServerModel
-import com.kihyeonkim.remotedeploy.deploy.vo.RemoteServerInfoVo
+import com.kihyeonkim.remotedeploy.remoteserver.mapper.RemoteServerMapper
+import com.kihyeonkim.remotedeploy.remoteserver.mdoel.RemoteServerModel
+import com.kihyeonkim.remotedeploy.remoteserver.vo.RemoteServerInfoVo
 import org.apache.commons.lang.StringUtils
 import org.springframework.stereotype.Service
 import java.util.regex.Pattern

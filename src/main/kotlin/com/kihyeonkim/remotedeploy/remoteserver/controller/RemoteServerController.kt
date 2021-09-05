@@ -1,8 +1,8 @@
-package com.kihyeonkim.remotedeploy.deploy.controller
+package com.kihyeonkim.remotedeploy.remoteserver.controller
 
 import com.kihyeonkim.remotedeploy.common.response.DeployResponse
-import com.kihyeonkim.remotedeploy.deploy.service.RemoteServerService
-import com.kihyeonkim.remotedeploy.deploy.vo.RemoteServerInfoVo
+import com.kihyeonkim.remotedeploy.remoteserver.service.RemoteServerService
+import com.kihyeonkim.remotedeploy.remoteserver.vo.RemoteServerInfoVo
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping

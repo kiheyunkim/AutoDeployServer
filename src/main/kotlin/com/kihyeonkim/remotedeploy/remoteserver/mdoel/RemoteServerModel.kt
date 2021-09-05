@@ -1,4 +1,4 @@
-package com.kihyeonkim.remotedeploy.deploy.model
+package com.kihyeonkim.remotedeploy.remoteserver.mdoel
 
 /**
  * IDE : IntelliJ IDEA

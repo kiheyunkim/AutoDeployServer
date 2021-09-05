@@ -1,4 +1,4 @@
-package com.kihyeonkim.remotedeploy.deploy.vo
+package com.kihyeonkim.remotedeploy.remoteserver.vo
 
 /**
  * IDE : IntelliJ IDEA

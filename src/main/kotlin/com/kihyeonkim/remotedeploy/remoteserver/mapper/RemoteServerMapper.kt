@@ -1,8 +1,8 @@
-package com.kihyeonkim.remotedeploy.deploy.mapper
+package com.kihyeonkim.remotedeploy.remoteserver.mapper
 
-import com.kihyeonkim.remotedeploy.deploy.model.RemoteServerConnectionInfo
-import com.kihyeonkim.remotedeploy.deploy.model.RemoteServerInfoModel
-import com.kihyeonkim.remotedeploy.deploy.model.RemoteServerModel
+import com.kihyeonkim.remotedeploy.remoteserver.mdoel.RemoteServerConnectionInfo
+import com.kihyeonkim.remotedeploy.remoteserver.mdoel.RemoteServerInfoModel
+import com.kihyeonkim.remotedeploy.remoteserver.mdoel.RemoteServerModel
 import org.apache.ibatis.annotations.Mapper
 
 /**

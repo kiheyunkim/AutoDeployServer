@@ -1,8 +1,8 @@
-package com.kihyeonkim.remotedeploy.deploy.controller
+package com.kihyeonkim.remotedeploy.scm.controller
 
 import com.kihyeonkim.remotedeploy.common.response.DeployResponse
-import com.kihyeonkim.remotedeploy.deploy.service.SCMService
-import com.kihyeonkim.remotedeploy.deploy.vo.ScmInfoVo
+import com.kihyeonkim.remotedeploy.scm.service.SCMService
+import com.kihyeonkim.remotedeploy.scm.vo.ScmInfoVo
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping

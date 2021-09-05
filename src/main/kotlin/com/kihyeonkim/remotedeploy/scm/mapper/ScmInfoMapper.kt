@@ -1,7 +1,7 @@
-package com.kihyeonkim.remotedeploy.deploy.mapper
+package com.kihyeonkim.remotedeploy.scm.mapper
 
 import com.kihyeonkim.remotedeploy.deploy.enumeration.ScmType
-import com.kihyeonkim.remotedeploy.deploy.model.ScmInfoModel
+import com.kihyeonkim.remotedeploy.scm.model.ScmInfoModel
 import com.kihyeonkim.remotedeploy.deploy.model.GithubKeySetModel
 import org.apache.ibatis.annotations.Mapper
 

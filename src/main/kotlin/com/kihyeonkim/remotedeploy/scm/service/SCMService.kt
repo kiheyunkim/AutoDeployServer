@@ -1,10 +1,10 @@
-package com.kihyeonkim.remotedeploy.deploy.service
+package com.kihyeonkim.remotedeploy.scm.service
 
 import com.kihyeonkim.remotedeploy.common.response.DeployResponse
 import com.kihyeonkim.remotedeploy.deploy.enumeration.ScmType
-import com.kihyeonkim.remotedeploy.deploy.mapper.ScmInfoMapper
-import com.kihyeonkim.remotedeploy.deploy.model.ScmInfoModel
-import com.kihyeonkim.remotedeploy.deploy.vo.ScmInfoVo
+import com.kihyeonkim.remotedeploy.scm.mapper.ScmInfoMapper
+import com.kihyeonkim.remotedeploy.scm.model.ScmInfoModel
+import com.kihyeonkim.remotedeploy.scm.vo.ScmInfoVo
 import com.kihyeonkim.remotedeploy.github.api.GithubApi
 import org.apache.commons.lang.StringUtils
 import org.springframework.stereotype.Service

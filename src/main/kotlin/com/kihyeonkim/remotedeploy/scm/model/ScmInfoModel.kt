@@ -1,4 +1,4 @@
-package com.kihyeonkim.remotedeploy.deploy.model
+package com.kihyeonkim.remotedeploy.scm.model
 
 import com.kihyeonkim.remotedeploy.deploy.enumeration.ScmType
 

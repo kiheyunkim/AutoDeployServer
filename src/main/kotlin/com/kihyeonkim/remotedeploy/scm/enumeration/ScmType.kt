@@ -1,4 +1,4 @@
-package com.kihyeonkim.remotedeploy.deploy.enumeration
+package com.kihyeonkim.remotedeploy.scm.enumeration
 
 /**
  * IDE : IntelliJ IDEA

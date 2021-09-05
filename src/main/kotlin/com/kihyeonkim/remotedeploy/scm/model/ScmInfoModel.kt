@@ -1,6 +1,6 @@
 package com.kihyeonkim.remotedeploy.scm.model
 
-import com.kihyeonkim.remotedeploy.deploy.enumeration.ScmType
+import com.kihyeonkim.remotedeploy.scm.enumeration.ScmType
 
 /**
  * IDE : IntelliJ IDEA

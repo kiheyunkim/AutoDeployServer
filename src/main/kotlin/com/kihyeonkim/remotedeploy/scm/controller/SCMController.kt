@@ -1,7 +1,7 @@
 package com.kihyeonkim.remotedeploy.scm.controller
 
 import com.kihyeonkim.remotedeploy.common.response.DeployResponse
-import com.kihyeonkim.remotedeploy.scm.service.SCMService
+import com.kihyeonkim.remotedeploy.scm.service.ScmService
 import com.kihyeonkim.remotedeploy.scm.vo.ScmInfoVo
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping
  */
 @Controller
 @RequestMapping("/scm")
-class SCMController(private val scmService: SCMService) {
+class SCMController(private val scmService: ScmService) {
 	@GetMapping("/list")
 	fun getScmInfoList(): DeployResponse<*> {
 		return scmService.getSCMInfoList()

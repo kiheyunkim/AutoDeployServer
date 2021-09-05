@@ -1,4 +1,4 @@
-package com.kihyeonkim.remotedeploy.deploy.service
+package com.kihyeonkim.remotedeploy.scenario.service
 
 import com.kihyeonkim.remotedeploy.deploy.enumeration.DeployStage
 import org.springframework.stereotype.Service

@@ -1,7 +1,7 @@
 package com.kihyeonkim.remotedeploy.scm.service
 
 import com.kihyeonkim.remotedeploy.common.response.DeployResponse
-import com.kihyeonkim.remotedeploy.deploy.enumeration.ScmType
+import com.kihyeonkim.remotedeploy.scm.enumeration.ScmType
 import com.kihyeonkim.remotedeploy.scm.mapper.ScmInfoMapper
 import com.kihyeonkim.remotedeploy.scm.model.ScmInfoModel
 import com.kihyeonkim.remotedeploy.scm.vo.ScmInfoVo
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service
  * Comment :
  */
 @Service
-class SCMService(
+class ScmService(
 	private val scmInfoMapper: ScmInfoMapper,
 	private val githubApi: GithubApi
 ) {

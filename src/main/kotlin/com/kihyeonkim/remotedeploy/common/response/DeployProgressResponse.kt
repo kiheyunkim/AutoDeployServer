@@ -1,6 +1,6 @@
 package com.kihyeonkim.remotedeploy.common.response
 
-import com.kihyeonkim.remotedeploy.jenkins.model.JenkinsLog
+import com.kihyeonkim.remotedeploy.apis.jenkins.model.JenkinsLog
 
 /**
  * IDE : IntelliJ IDEA

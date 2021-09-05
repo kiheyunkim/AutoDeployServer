@@ -1,4 +1,4 @@
-package com.kihyeonkim.remotedeploy.deploy.model
+package com.kihyeonkim.remotedeploy.scm.model
 
 import com.kihyeonkim.remotedeploy.scm.enumeration.ScmType
 
@@ -8,8 +8,9 @@ import com.kihyeonkim.remotedeploy.scm.enumeration.ScmType
  * GitHub : http://github.com/kiheyunkim
  * Comment :
  */
-data class RepoAliasModel(
+data class ScmInfoModel(
 	var scmType: ScmType,
 	var repoAlias: String,
-	var userName: String
+	var userName: String,
+	var personalAccessToken: String,
 )

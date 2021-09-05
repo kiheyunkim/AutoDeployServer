@@ -2,8 +2,8 @@ package com.kihyeonkim.remotedeploy.common
 
 import com.kihyeonkim.remotedeploy.common.enumeration.SshConfigMessageType
 import com.kihyeonkim.remotedeploy.common.model.SshConfigMessageModel
-import com.kihyeonkim.remotedeploy.github.model.SshConfigModel
-import com.kihyeonkim.remotedeploy.github.repository.SshConfigRepository
+import com.kihyeonkim.remotedeploy.apis.github.model.SshConfigModel
+import com.kihyeonkim.remotedeploy.apis.github.repository.SshConfigRepository
 import org.springframework.amqp.core.Message
 import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.beans.factory.annotation.Value

@@ -50,7 +50,7 @@
 		WHERE SCM_INFO_ALIAS = #{scmInfoAlias}
 	</update>
 
-	<delete id="deleteRepoInfo" parameterType="hashMap">
+	<delete id="deleteScmInfo" parameterType="hashMap">
 		DELETE
 		FROM SCM_INFO
 		WHERE SCM_INFO_ALIAS = #{scmInfoAlias}

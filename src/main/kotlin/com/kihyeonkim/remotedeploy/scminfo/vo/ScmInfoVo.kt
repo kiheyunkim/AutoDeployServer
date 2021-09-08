@@ -1,4 +1,4 @@
-package com.kihyeonkim.remotedeploy.scm.vo
+package com.kihyeonkim.remotedeploy.scminfo.vo
 
 /**
  * IDE : IntelliJ IDEA

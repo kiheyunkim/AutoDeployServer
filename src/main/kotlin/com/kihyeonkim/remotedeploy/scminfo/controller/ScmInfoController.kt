@@ -1,8 +1,8 @@
-package com.kihyeonkim.remotedeploy.scm.controller
+package com.kihyeonkim.remotedeploy.scminfo.controller
 
 import com.kihyeonkim.remotedeploy.common.response.DeployResponse
-import com.kihyeonkim.remotedeploy.scm.service.ScmService
-import com.kihyeonkim.remotedeploy.scm.vo.ScmInfoVo
+import com.kihyeonkim.remotedeploy.scminfo.service.ScmInfoService
+import com.kihyeonkim.remotedeploy.scminfo.vo.ScmInfoVo
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -15,25 +15,25 @@ import org.springframework.web.bind.annotation.RequestMapping
  * Comment :
  */
 @Controller
-@RequestMapping("/scm")
-class SCMController(private val scmService: ScmService) {
+@RequestMapping("/scmInfo")
+class ScmInfoController(private val scmInfoService: ScmInfoService) {
 	@GetMapping("/list")
 	fun getScmInfoList(): DeployResponse<*> {
-		return scmService.getSCMInfoList()
+		return scmInfoService.getSCMInfoList()
 	}
 
 	@PostMapping("/add")
 	fun postGithubApi(scmInfoVo: ScmInfoVo): DeployResponse<*> {
-		return scmService.addSCMInfo(scmInfoVo)
+		return scmInfoService.addSCMInfo(scmInfoVo)
 	}
 
 	@PostMapping("/modify")
 	fun postModifyGithubApi(scmInfoVo: ScmInfoVo): DeployResponse<*> {
-		return scmService.modifySCMInfo(scmInfoVo)
+		return scmInfoService.modifySCMInfo(scmInfoVo)
 	}
 
 	@PostMapping("/delete")
 	fun deleteGithubApi(repoAlias: String): DeployResponse<*> {
-		return scmService.deleteSCMInfo(repoAlias)
+		return scmInfoService.deleteSCMInfo(repoAlias)
 	}
 }

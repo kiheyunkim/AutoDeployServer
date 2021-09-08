@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.kihyeonkim.remotedeploy.scm.mapper.ScmInfoMapper">
+<mapper namespace="com.kihyeonkim.remotedeploy.scminfo.mapper.ScmInfoMapper">
+	<resultMap id="scmInfoListModel" type="com.kihyeonkim.remotedeploy.scminfo.model.ScmInfoListModel">
+		<result column="SCM_TYPE" property="scmType"/>
+		<result column="SCM_INFO_ALIAS" property="scmInfoAlias"/>
+		<result column="USERNAME" property="userName"/>
+	</resultMap>
+
 	<resultMap id="gitHubKeySet" type="com.kihyeonkim.remotedeploy.deploy.model.GithubKeySetModel">
-		<result column="USER_NAME" property="userName"/>
-		<result column="PERSONAL_ACCESS_TOKEN" property="accessToken"/>
+		<result column="USERNAME" property="userName"/>
+		<result column="PERSONAL_ACCESS_TOKEN" property="personalAccessToken"/>
 	</resultMap>
 
 	<resultMap id="repoAliasModel" type="com.kihyeonkim.remotedeploy.deploy.model.RepoAliasModel">
 		<result column="SCM_TYPE" property="scmType"/>
-		<result column="REPO_ALIAS" property="repoAlias"/>
+		<result column="SCM_INFO_ALIAS" property="scmInfoAlias"/>
 		<result column="USERNAME" property="userName"/>
 	</resultMap>
 
@@ -24,16 +30,16 @@
 		SELECT USERNAME,
 			   PERSONAL_ACCESS_TOKEN
 		FROM SCM_INFO
-		WHERE REPO_ALIAS = #{repoAlias}
+		WHERE SCM_INFO_ALIAS = #{scmInfoAlias}
 	</select>
 
 	<insert id="insertRepoInfo" parameterType="hashMap">
 		INSERT INTO SCM_INFO(SCM_TYPE,
-							 REPO_ALIAS,
+							 SCM_INFO_ALIAS,
 							 USERNAME,
 							 PERSONAL_ACCESS_TOKEN)
 		VALUES (#{scmType},
-				#{repoAlias},
+				#{scmInfoAlias},
 				#{userName},
 				#{personalAccessToken})
 	</insert>
@@ -47,20 +53,20 @@
 				PERSONAL_ACCESS_TOKEN=#{personalAccessToken},
 			</if>
 		</set>
-		WHERE REPO_ALIAS = #{repoAlias}
+		WHERE SCM_INFO_ALIAS = #{scmInfoAlias}
 	</update>
 
 	<delete id="deleteRepoInfo" parameterType="hashMap">
 		DELETE
 		FROM SCM_INFO
-		WHERE REPO_ALIAS = #{repoAlias}
+		WHERE SCM_INFO_ALIAS = #{scmInfoAlias}
 	</delete>
 
 	<select id="selectRepoAliasExist" parameterType="hashMap" resultType="boolean">
 		SELECT EXISTS(
 					   SELECT 1
 					   FROM SCM_INFO
-					   WHERE REPO_ALIAS = #{repoAlias}
+					   WHERE SCM_INFO_ALIAS = #{scmInfoAlias}
 				   )
 	</select>
 </mapper>

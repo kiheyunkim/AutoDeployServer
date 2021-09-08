@@ -1,11 +1,12 @@
-package com.kihyeonkim.remotedeploy.scm.service
+package com.kihyeonkim.remotedeploy.scminfo.service
 
 import com.kihyeonkim.remotedeploy.common.response.DeployResponse
-import com.kihyeonkim.remotedeploy.scm.enumeration.ScmType
-import com.kihyeonkim.remotedeploy.scm.mapper.ScmInfoMapper
-import com.kihyeonkim.remotedeploy.scm.model.ScmInfoModel
-import com.kihyeonkim.remotedeploy.scm.vo.ScmInfoVo
+import com.kihyeonkim.remotedeploy.scminfo.enumeration.ScmType
+import com.kihyeonkim.remotedeploy.scminfo.mapper.ScmInfoMapper
+import com.kihyeonkim.remotedeploy.scminfo.model.ScmInfoModel
+import com.kihyeonkim.remotedeploy.scminfo.vo.ScmInfoVo
 import com.kihyeonkim.remotedeploy.apis.github.api.GithubApi
+import com.kihyeonkim.remotedeploy.scminfo.model.ScmInfoListModel
 import org.apache.commons.lang.StringUtils
 import org.springframework.stereotype.Service
 
@@ -16,11 +17,11 @@ import org.springframework.stereotype.Service
  * Comment :
  */
 @Service
-class ScmService(
+class ScmInfoService(
 	private val scmInfoMapper: ScmInfoMapper,
 	private val githubApi: GithubApi
 ) {
-	fun getSCMInfoList(): DeployResponse<List<ScmInfoModel>> {
+	fun getSCMInfoList(): DeployResponse<List<ScmInfoListModel>> {
 		return DeployResponse(scmInfoMapper.selectScmInfoList())
 	}
 

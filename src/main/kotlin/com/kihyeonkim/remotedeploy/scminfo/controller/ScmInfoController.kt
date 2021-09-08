@@ -4,9 +4,7 @@ import com.kihyeonkim.remotedeploy.common.response.DeployResponse
 import com.kihyeonkim.remotedeploy.scminfo.service.ScmInfoService
 import com.kihyeonkim.remotedeploy.scminfo.vo.ScmInfoVo
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 
 /**
  * IDE : IntelliJ IDEA
@@ -18,22 +16,26 @@ import org.springframework.web.bind.annotation.RequestMapping
 @RequestMapping("/scmInfo")
 class ScmInfoController(private val scmInfoService: ScmInfoService) {
 	@GetMapping("/list")
+	@ResponseBody
 	fun getScmInfoList(): DeployResponse<*> {
 		return scmInfoService.getSCMInfoList()
 	}
 
 	@PostMapping("/add")
-	fun postGithubApi(scmInfoVo: ScmInfoVo): DeployResponse<*> {
+	@ResponseBody
+	fun postGithubApi(@RequestBody scmInfoVo: ScmInfoVo): DeployResponse<*> {
 		return scmInfoService.addSCMInfo(scmInfoVo)
 	}
 
 	@PostMapping("/modify")
-	fun postModifyGithubApi(scmInfoVo: ScmInfoVo): DeployResponse<*> {
+	@ResponseBody
+	fun postModifyGithubApi(@RequestBody scmInfoVo: ScmInfoVo): DeployResponse<*> {
 		return scmInfoService.modifySCMInfo(scmInfoVo)
 	}
 
 	@PostMapping("/delete")
-	fun deleteGithubApi(repoAlias: String): DeployResponse<*> {
+	@ResponseBody
+	fun deleteGithubApi(@RequestBody repoAlias: String): DeployResponse<*> {
 		return scmInfoService.deleteSCMInfo(repoAlias)
 	}
 }

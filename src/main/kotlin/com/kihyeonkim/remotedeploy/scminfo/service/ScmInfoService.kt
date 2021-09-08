@@ -28,13 +28,13 @@ class ScmInfoService(
 	fun addSCMInfo(scmInfoVo: ScmInfoVo): DeployResponse<*> {
 		if (StringUtils.isBlank(scmInfoVo.scmType) ||
 			StringUtils.isBlank(scmInfoVo.userName) ||
-			StringUtils.isBlank(scmInfoVo.repoAlias) ||
+			StringUtils.isBlank(scmInfoVo.scmInfoAlias) ||
 			StringUtils.isBlank(scmInfoVo.personalAccessToken)
 		) {
 			return DeployResponse(false, null, "값이 누락되었습니다")
 		}
 
-		if (scmInfoMapper.selectRepoAliasExist(scmInfoVo.repoAlias!!)) {
+		if (scmInfoMapper.selectRepoAliasExist(scmInfoVo.scmInfoAlias!!)) {
 			return DeployResponse(false, null, "이미 존재하는 repoAlias입니다.")
 		}
 
@@ -53,7 +53,7 @@ class ScmInfoService(
 		scmInfoMapper.insertScmInfo(
 			ScmInfoModel(
 				scmType,
-				scmInfoVo.repoAlias!!,
+				scmInfoVo.scmInfoAlias!!,
 				scmInfoVo.userName!!,
 				scmInfoVo.personalAccessToken!!
 			)
@@ -63,7 +63,7 @@ class ScmInfoService(
 	}
 
 	fun modifySCMInfo(scmInfoVo: ScmInfoVo): DeployResponse<*> {
-		if (StringUtils.isBlank(scmInfoVo.repoAlias)) {
+		if (StringUtils.isBlank(scmInfoVo.scmInfoAlias)) {
 			return DeployResponse(false, null, "repoAlias값이 비었습니다.")
 		}
 
@@ -83,7 +83,7 @@ class ScmInfoService(
 			}
 		}
 
-		scmInfoMapper.updateScmInfo(scmInfoVo.repoAlias!!, scmType, scmInfoVo.userName, scmInfoVo.personalAccessToken)
+		scmInfoMapper.updateScmInfo(scmInfoVo.scmInfoAlias!!, scmType, scmInfoVo.userName, scmInfoVo.personalAccessToken)
 
 		return DeployResponse(true)
 	}

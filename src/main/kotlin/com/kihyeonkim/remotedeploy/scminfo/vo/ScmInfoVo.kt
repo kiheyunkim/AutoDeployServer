@@ -8,7 +8,7 @@ package com.kihyeonkim.remotedeploy.scminfo.vo
  */
 data class ScmInfoVo(
 	var scmType: String?,
-	var repoAlias: String?,
+	var scmInfoAlias: String?,
 	var userName: String?,
 	var personalAccessToken: String?,
 )

@@ -13,15 +13,9 @@
 		<result column="PERSONAL_ACCESS_TOKEN" property="personalAccessToken"/>
 	</resultMap>
 
-	<resultMap id="repoAliasModel" type="com.kihyeonkim.remotedeploy.deploy.model.RepoAliasModel">
-		<result column="SCM_TYPE" property="scmType"/>
-		<result column="SCM_INFO_ALIAS" property="scmInfoAlias"/>
-		<result column="USERNAME" property="userName"/>
-	</resultMap>
-
-	<select id="selectRepoAliasList" resultType="repoAliasModel">
+	<select id="selectScmInfoList" resultMap="scmInfoListModel">
 		SELECT SCM_TYPE,
-			   REPO_ALIAS,
+			   SCM_INFO_ALIAS,
 			   USERNAME
 		FROM SCM_INFO
 	</select>
@@ -33,7 +27,7 @@
 		WHERE SCM_INFO_ALIAS = #{scmInfoAlias}
 	</select>
 
-	<insert id="insertRepoInfo" parameterType="hashMap">
+	<insert id="insertScmInfo" parameterType="hashMap">
 		INSERT INTO SCM_INFO(SCM_TYPE,
 							 SCM_INFO_ALIAS,
 							 USERNAME,

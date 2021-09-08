@@ -8,6 +8,7 @@ import com.kihyeonkim.remotedeploy.apis.github.model.RepositoryInfo
 import com.kihyeonkim.remotedeploy.deploy.model.GithubKeySetModel
 import org.springframework.http.*
 import org.springframework.stereotype.Component
+import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponents
 import org.springframework.web.util.UriComponentsBuilder
@@ -104,17 +105,23 @@ class GithubApi(
 		val restTemplate = RestTemplate()
 		val httpHeaders = HttpHeaders()
 		httpHeaders.contentType = MediaType(MediaType.APPLICATION_JSON, Charsets.UTF_8)
+		httpHeaders.add("Authorization", "token ${accessToken}")
 
 		val uriComponents: UriComponents = UriComponentsBuilder.fromHttpUrl(repositoryListApi)
-			.queryParam("access_token", accessToken)
 			.build(false)
 
-		val responseEntity = restTemplate.exchange(
-			uriComponents.toUriString(),
-			HttpMethod.GET,
-			HttpEntity<String>(httpHeaders),
-			String::class.java
-		)
+		val responseEntity = try{
+			restTemplate.exchange(
+				uriComponents.toUriString(),
+				HttpMethod.GET,
+				HttpEntity<String>(httpHeaders),
+				String::class.java
+			)
+		} catch (restClientException: RestClientException){
+			print(restClientException)
+			return false;
+		}
+
 
 		return responseEntity.statusCode == HttpStatus.OK
 	}

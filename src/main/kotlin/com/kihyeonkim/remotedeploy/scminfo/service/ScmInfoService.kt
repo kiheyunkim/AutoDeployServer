@@ -34,7 +34,7 @@ class ScmInfoService(
 			return DeployResponse(false, null, "값이 누락되었습니다")
 		}
 
-		if (scmInfoMapper.selectRepoAliasExist(scmInfoVo.scmInfoAlias!!)) {
+		if (scmInfoMapper.selectScmInfoAliasExist(scmInfoVo.scmInfoAlias!!)) {
 			return DeployResponse(false, null, "이미 존재하는 repoAlias입니다.")
 		}
 

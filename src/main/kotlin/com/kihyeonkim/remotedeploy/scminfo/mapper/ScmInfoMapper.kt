@@ -15,9 +15,9 @@ import org.apache.ibatis.annotations.Mapper
 @Mapper
 interface ScmInfoMapper {
 	fun selectScmInfoList(): List<ScmInfoListModel>
-	fun selectScmKeySet(scmInfoAlias: String): GithubKeySetModel?
+	fun selectScmKeySet(scmInfoAlias: String): GithubKeySetModel
 	fun insertScmInfo(scmInfoModel: ScmInfoModel)
 	fun updateScmInfo(scmInfoAlias: String, scmType: ScmType?, userName: String?, personalAccessToken: String?)
 	fun deleteScmInfo(scmInfoAlias: String)
-	fun selectRepoAliasExist(scmInfoAlias: String): Boolean
+	fun selectScmInfoAliasExist(scmInfoAlias: String): Boolean
 }

@@ -10,7 +10,7 @@
 
 	<resultMap id="gitHubKeySet" type="com.kihyeonkim.remotedeploy.deploy.model.GithubKeySetModel">
 		<result column="USERNAME" property="userName"/>
-		<result column="PERSONAL_ACCESS_TOKEN" property="personalAccessToken"/>
+		<result column="PERSONAL_ACCESS_TOKEN" property="accessToken"/>
 	</resultMap>
 
 	<select id="selectScmInfoList" resultMap="scmInfoListModel">

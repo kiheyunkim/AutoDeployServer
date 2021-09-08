@@ -32,26 +32,41 @@ class GithubApi(
 		"https://api.github.com/repos/${userName}/${repositoryName}/keys"
 	}
 
-	fun getRepositoryList(accessToken: String): ArrayList<RepositoryInfo> {
-		val restTemplate = RestTemplate()
-		val httpHeaders = HttpHeaders()
-		httpHeaders.contentType = MediaType(MediaType.APPLICATION_JSON, Charsets.UTF_8)
+	fun getRepositoryList(accessToken: String): List<RepositoryInfo> {
+		var currentPage = 1
 
-		val uriComponents: UriComponents = UriComponentsBuilder.fromHttpUrl(repositoryListApi)
-			.queryParam("access_token", accessToken)
-			.queryParam("per_page", 100)
-			.build(false)
+		val repositoryList = mutableListOf<RepositoryInfo>()
 
-		val responseEntity = restTemplate.exchange(
-			uriComponents.toUriString(),
-			HttpMethod.GET,
-			HttpEntity<String>(httpHeaders),
-			String::class.java
-		)
+		while (true) {
+			val restTemplate = RestTemplate()
+			val httpHeaders = HttpHeaders()
+			httpHeaders.contentType = MediaType(MediaType.APPLICATION_JSON, Charsets.UTF_8)
+			httpHeaders.add("Authorization", "token $accessToken")
 
-		val itemType = object : TypeToken<ArrayList<RepositoryInfo>>() {}.type
+			val uriComponents: UriComponents = UriComponentsBuilder.fromHttpUrl(repositoryListApi)
+				.queryParam("per_page", 100)
+				.queryParam("page", currentPage)
+				.build(false)
 
-		return Gson().fromJson(responseEntity.body, itemType)
+			val responseEntity = restTemplate.exchange(
+				uriComponents.toUriString(),
+				HttpMethod.GET,
+				HttpEntity<String>(httpHeaders),
+				String::class.java
+			)
+
+			val itemType = object : TypeToken<ArrayList<RepositoryInfo>>() {}.type
+
+			val response = Gson().fromJson<ArrayList<RepositoryInfo>>(responseEntity.body, itemType)
+			if (response.size == 0) {
+				break;
+			}
+
+			repositoryList.addAll(Gson().fromJson(responseEntity.body, itemType))
+			++currentPage
+		}
+
+		return repositoryList
 	}
 
 	fun getRepositoryBranchList(githubKeySetModel: GithubKeySetModel, repositoryName: String) {
@@ -76,7 +91,11 @@ class GithubApi(
 		return Gson().fromJson(responseEntity.body, itemType)
 	}
 
-	fun addDeployKeyAndSSHKey(githubKeySetModel: GithubKeySetModel, repoAlias: String, repositoryName: String): Boolean {
+	fun addDeployKeyAndSSHKey(
+		githubKeySetModel: GithubKeySetModel,
+		repoAlias: String,
+		repositoryName: String
+	): Boolean {
 		val publicKey =
 			sshKeyApi.saveRSAPrivateKeyAndGetPublicKey(repoAlias, repositoryName)
 
@@ -105,19 +124,19 @@ class GithubApi(
 		val restTemplate = RestTemplate()
 		val httpHeaders = HttpHeaders()
 		httpHeaders.contentType = MediaType(MediaType.APPLICATION_JSON, Charsets.UTF_8)
-		httpHeaders.add("Authorization", "token ${accessToken}")
+		httpHeaders.add("Authorization", "token $accessToken")
 
 		val uriComponents: UriComponents = UriComponentsBuilder.fromHttpUrl(repositoryListApi)
 			.build(false)
 
-		val responseEntity = try{
+		val responseEntity = try {
 			restTemplate.exchange(
 				uriComponents.toUriString(),
 				HttpMethod.GET,
 				HttpEntity<String>(httpHeaders),
 				String::class.java
 			)
-		} catch (restClientException: RestClientException){
+		} catch (restClientException: RestClientException) {
 			print(restClientException)
 			return false;
 		}

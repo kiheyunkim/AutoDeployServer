@@ -20,6 +20,11 @@
 		FROM SCM_INFO
 	</select>
 
+	<select id="selectScmInfoAliasList" resultType="string">
+		SELECT SCM_INFO_ALIAS
+		FROM SCM_INFO
+	</select>
+
 	<select id="selectScmKeySet" parameterType="hashMap" resultMap="gitHubKeySet">
 		SELECT USERNAME,
 			   PERSONAL_ACCESS_TOKEN

@@ -3,10 +3,7 @@ package com.kihyeonkim.remotedeploy.scm.controller
 import com.kihyeonkim.remotedeploy.common.response.DeployResponse
 import com.kihyeonkim.remotedeploy.scm.service.ScmService
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.*
 
 /**
  * IDE : IntelliJ IDEA
@@ -18,9 +15,15 @@ import org.springframework.web.bind.annotation.ResponseBody
 @RequestMapping("/scm")
 class ScmController(private val scmService: ScmService) {
 
+	@GetMapping("/keyAliasList")
+	@ResponseBody
+	fun addScm():DeployResponse<*>{
+		return scmService.getKeyAliasList()
+	}
+
 	@GetMapping("/repositoryList")
 	@ResponseBody
-	fun getRepositoryList(
+	fun getScmList(
 		@RequestParam(
 			name = "scmInfoAlias",
 			required = true
@@ -28,5 +31,4 @@ class ScmController(private val scmService: ScmService) {
 	): DeployResponse<*> {
 		return scmService.getRepositoryList(scmInfoAlias)
 	}
-
 }

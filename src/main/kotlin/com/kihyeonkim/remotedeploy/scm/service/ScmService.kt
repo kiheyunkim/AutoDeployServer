@@ -17,6 +17,10 @@ class ScmService(
 	private val githubApi: GithubApi
 ) {
 
+	fun getKeyAliasList(): DeployResponse<*> {
+		return DeployResponse(scmInfoMapper.selectScmInfoAliasList())
+	}
+
 	fun getRepositoryList(scmInfoAlias: String): DeployResponse<*> {
 		val scmKeySet = scmInfoMapper.selectScmKeySet(scmInfoAlias)
 
@@ -24,4 +28,5 @@ class ScmService(
 
 		return DeployResponse(result)
 	}
+
 }

@@ -22,6 +22,7 @@ class ScmService(
 	private val scmMapper: ScmMapper,
 	private val githubApi: GithubApi
 ) {
+	private val pageCount: Int = 10
 
 	fun getKeyAliasList(): DeployResponse<*> {
 		return DeployResponse(scmInfoMapper.selectScmInfoAliasList())
@@ -38,7 +39,7 @@ class ScmService(
 			return DeployResponse(null, null, "잘못된 페이지 입니다.")
 		}
 
-		return DeployResponse(scmMapper.selectScmList(page))
+		return DeployResponse(scmMapper.selectScmList((page - 1) * pageCount, pageCount))
 	}
 
 	fun addScm(scmVo: ScmVo): DeployResponse<*> {

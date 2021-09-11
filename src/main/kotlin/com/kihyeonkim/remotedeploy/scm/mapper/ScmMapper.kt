@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Mapper
  */
 @Mapper
 interface ScmMapper {
-	fun selectScmList(page: Int)
+	fun selectScmList(offset: Int, pageCount: Int)
 	fun insertScm(scmModel: ScmModel)
 	fun deleteScm(scmAlias: String)
 	fun selectScmAliasExist(scmAlias: String): Boolean

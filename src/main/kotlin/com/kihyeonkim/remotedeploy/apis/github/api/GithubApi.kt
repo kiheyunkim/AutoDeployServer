@@ -26,10 +26,13 @@ class GithubApi(
 	private val objectMapper: ObjectMapper = ObjectMapper()
 	private val repositoryListApi = "https://api.github.com/user/repos"
 	private val repositoryBranchListApi: (String, String) -> String = { userName, repositoryName ->
-		"https://api.github.com/repos/${userName}/${repositoryName}/branches"
+		"https://api.github.com/repos/$userName/$repositoryName/branches"
 	}
 	private val deployKeyRegisterApi: (String, String) -> String = { userName, repositoryName ->
-		"https://api.github.com/repos/${userName}/${repositoryName}/keys"
+		"https://api.github.com/repos/$userName/$repositoryName/keys"
+	}
+	private val repositoryInfoApi: (String, String) -> String = { userName, repositoryName ->
+		"https://api.github.com/repos/$userName/$repositoryName"
 	}
 
 	fun getRepositoryList(accessToken: String): List<RepositoryInfo> {
@@ -137,12 +140,37 @@ class GithubApi(
 				String::class.java
 			)
 		} catch (restClientException: RestClientException) {
-			print(restClientException)
 			return false;
 		}
 
 
 		return responseEntity.statusCode == HttpStatus.OK
+	}
+
+	fun getRepositorySshUrl(username: String, repositoryName: String, accessToken: String): String {
+		val restTemplate = RestTemplate()
+		val httpHeaders = HttpHeaders()
+		httpHeaders.contentType = MediaType(MediaType.APPLICATION_JSON, Charsets.UTF_8)
+		httpHeaders.add("Authorization", "token $accessToken")
+
+		val uriComponents: UriComponents = UriComponentsBuilder.fromHttpUrl(repositoryInfoApi(username, repositoryName))
+			.build(false)
+
+		val responseEntity = try {
+			restTemplate.exchange(
+				uriComponents.toUriString(),
+				HttpMethod.GET,
+				HttpEntity<String>(httpHeaders),
+				String::class.java
+			)
+		} catch (restClientException: RestClientException) {
+			throw restClientException
+		}
+
+		val itemType = object : TypeToken<RepositoryInfo>() {}.type
+		val parsedResult = Gson().fromJson<RepositoryInfo>(responseEntity.body, itemType)
+
+		return parsedResult.sshUrl
 	}
 
 	//ToDo: deploy Key 삭제 로직 가능하면 추가.

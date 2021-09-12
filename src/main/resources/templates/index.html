@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+</head>
+<body>
+<div id="testArea">
+
+</div>
+<script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+<script>
+    let start = 0
+    let deployInterval = setInterval(function () {
+        $.ajax({
+            url: "/deploy/deployProgress",
+            method: "GET",
+            data: {
+                jobName: "test2",
+                jobNumber: 13,
+                start: start
+            }
+        }).done(function (response) {
+            let {text, size, hasMore} = response.result
+
+            if (!hasMore) {
+                clearInterval(deployInterval);
+            }
+
+            text = text.replace(/(?:\r\n|\r|\n)/g, '<br />');
+            $('#testArea').append(text);
+            start = size;
+        });
+    }, 1000);
+</script>
+</body>
+</html>

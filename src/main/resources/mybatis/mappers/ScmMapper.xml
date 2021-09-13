@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kihyeonkim.remotedeploy.scm.mapper.ScmMapper">
+	<resultMap id="ScmModel" type="com.kihyeonkim.remotedeploy.scm.model.ScmModel">
+		<result column="SCM_INFO_ALIAS" property="deployStage"/>
+		<result column="SCM_ALIAS" property="deployState"/>
+		<result column="REPOSITORY_SSH_URL" property="scenarioName"/>
+		<result column="IS_PRIVATE" property="buildTarget"/>
+	</resultMap>
+
+	<select id="selectDeployHistory" parameterType="hashMap" resultMap="ScmModel">
+		SELECT SCM_INFO_ALIAS,
+			   SCM_ALIAS,
+			   REPOSITORY_SSH_URL,
+			   IS_PRIVATE
+		FROM SCM
+		ORDER BY ID
+		LIMIT #{pageCount} OFFSET #{offset}
+	</select>
+
+	<insert id="insertScm" parameterType="hashMap">
+		INSERT INTO SCM(SCM_INFO_ALIAS,
+						SCM_ALIAS,
+						REPOSITORY_SSH_URL,
+						IS_PRIVATE)
+		VALUES (#{scmInfoAlias},
+				#{scmAlias},
+				#{repositorySshUrl},
+				#{isPrivate})
+	</insert>
+
+	<delete id="deleteScm" parameterType="hashMap">
+		DELETE
+		FROM SCM
+		WHERE SCM_ALIAS = #{scmAlias}
+	</delete>
+
+	<select id="selectScmAliasExist" parameterType="hashMap" resultType="boolean">
+		SELECT EXISTS(
+					   SELECT 1
+					   FROM SCM
+					   WHERE SCM_ALIAS = #{scmAlias}
+				   )
+	</select>
+</mapper>

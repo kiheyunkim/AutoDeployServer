@@ -1,6 +1,6 @@
-package com.kihyeonkim.remotedeploy.scm.model
+package com.kihyeonkim.remotedeploy.scminfo.model
 
-import com.kihyeonkim.remotedeploy.scm.enumeration.ScmType
+import com.kihyeonkim.remotedeploy.scminfo.enumeration.ScmType
 
 /**
  * IDE : IntelliJ IDEA
@@ -10,7 +10,7 @@ import com.kihyeonkim.remotedeploy.scm.enumeration.ScmType
  */
 data class ScmInfoModel(
 	var scmType: ScmType,
-	var repoAlias: String,
+	var scmInfoAlias: String,
 	var userName: String,
 	var personalAccessToken: String,
 )

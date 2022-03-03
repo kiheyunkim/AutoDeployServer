@@ -1,4 +1,4 @@
-package com.kihyeonkim.remotedeploy.remoteserver.vo
+package com.kihyeonkim.remotedeploy.remoteserver.model
 
 /**
  * IDE : IntelliJ IDEA
@@ -6,7 +6,7 @@ package com.kihyeonkim.remotedeploy.remoteserver.vo
  * GitHub : http://github.com/kiheyunkim
  * Comment :
  */
-data class RemoteServerInfoVo(
+data class RemoteServerInfo(
 	var remoteServerAlias: String?,
 	var remoteIp: String?,
 	var publicKey: String?

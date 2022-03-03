@@ -15,6 +15,9 @@ import java.util.regex.Pattern
  */
 @Service
 class RemoteServerService(private val remoteServerMapper: RemoteServerMapper) {
+	private val ipCheckRegex =
+		"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\$\n"
+
 	fun getRemoteServerList(): DeployResponse<*> {
 
 		return DeployResponse(remoteServerMapper.selectRemoteServerInfoList())
@@ -38,7 +41,7 @@ class RemoteServerService(private val remoteServerMapper: RemoteServerMapper) {
 			return DeployResponse(null, null, "값이 누락되었습니다")
 		}
 
-		if (Pattern.compile("^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\$\n")
+		if (Pattern.compile(ipCheckRegex)
 				.matcher(remoteServerInfo.remoteIp!!).matches()
 		) {
 			return DeployResponse(null, null, "올바르지 않은 IP주소입니다")

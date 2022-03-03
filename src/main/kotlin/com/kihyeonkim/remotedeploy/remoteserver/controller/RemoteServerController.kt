@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 @RequestMapping("/remoteServer")
 class RemoteServerController(private val remoteServerService: RemoteServerService) {
 
-
 	@ApiOperation(value = "원격 서버 목록 반환")
 	@GetMapping("/list")
 	fun getServerInfoList(): DeployResponse<*> {

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kihyeonkim.remotedeploy.remoteserver.mapper.RemoteServerMapper">
+
+    <resultMap id="remoteServerInfo" type="com.kihyeonkim.remotedeploy.remoteserver.model.RemoteServerInfo">
+        <result column="REMOTE_SERVER_ALIAS" property="remoteServerAlias"/>
+        <result column="REMOTE_IP" property="remoteIp"/>
+        <result column="PUBLIC_KEY" property="publicKey"/>
+    </resultMap>
+
+    <select id="selectRemoteServerInfoList" resultMap="remoteServerInfo">
+        SELECT REMOTE_SERVER_ALIAS,
+               REMOTE_IP
+        FROM REMOTE_SERVER
+    </select>
+
+    <select id="selectRemoteServerConnectionInfo" resultMap="remoteServerInfo">
+        SELECT REMOTE_IP,
+               PUBLIC_KEY
+        FROM REMOTE_SERVER
+    </select>
+
+    <insert id="insertRemoteServerInfo" parameterType="com.kihyeonkim.remotedeploy.remoteserver.model.RemoteServerInfo">
+        INSERT INTO REMOTE_SERVER(REMOTE_SERVER_ALIAS,
+                                  REMOTE_IP,
+                                  PUBLIC_KEY)
+        VALUES (#{remoteServerAlias},
+                #{remoteIp},
+                #{publicKey})
+    </insert>
+
+    <delete id="deleteRemoteServerInfo" parameterType="String">
+        DELETE
+        FROM REMOTE_SERVER
+        WHERE REMOTE_SERVER_ALIAS = #{remoteServerAlias}
+    </delete>
+
+    <select id="selectRemoteServerAliasExist" parameterType="String">
+        SELECT EXISTS(
+                       SELECT 1
+                       FROM REMOTE_SERVER
+                       WHERE REMOTE_SERVER_ALIAS = #{remoteServerAlias}
+                   )
+    </select>
+
+    <update id="updateRemoteServerInfo" parameterType="com.kihyeonkim.remotedeploy.remoteserver.model.RemoteServerInfo">
+        UPDATE REMOTE_SERVER
+        <set>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(remoteIp)">REMOTE_IP=#{remoteIp}</if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(remoteIp)">PUBLIC_KEY=#{publicKey}</if>
+        </set>
+        WHERE REMOTE_SERVER_ALIAS = #{remoteServerAlias}
+    </update>
+</mapper>

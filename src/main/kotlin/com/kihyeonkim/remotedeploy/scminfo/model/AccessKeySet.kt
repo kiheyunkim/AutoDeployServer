@@ -6,7 +6,8 @@ package com.kihyeonkim.remotedeploy.scminfo.model
  * GitHub : http://github.com/kiheyunkim
  * Comment :
  */
-data class GithubKeySetModel(
-	var userName: String,
-	var personalAccessToken: String,
+data class AccessKeySet(
+	val userName: String? = null,
+	val personalAccessToken: String? = null,
+	val scmInfoAlias: String? = null
 )

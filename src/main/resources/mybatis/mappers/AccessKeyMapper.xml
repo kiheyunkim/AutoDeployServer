@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kihyeonkim.remotedeploy.scminfo.mapper.AccessKeyMapper">
+    <resultMap id="accessKey" type="com.kihyeonkim.remotedeploy.scminfo.model.AccessKeySet">
+        <result column="USER_NAME" property="userName"/>
+        <result column="PERSONAL_ACCESS_TOEKEN" property="personalAccessToken"/>
+        <result column="SCM_INFO_ALIAS" property="scmInfoAlias"/>
+    </resultMap>
+
+    <select id="selectAccessKey" parameterType="String" resultMap="accessKey">
+        SELECT USER_NAME,
+               PERSONAL_ACCESS_TOEKEN,
+               SCM_INFO_ALIAS
+        FROM ACCESS_KEY
+        WHERE SCM_INFO_ALIAS = #{scmInfoAlias}
+    </select>
+
+    <insert id="insertAccessKey" parameterType="com.kihyeonkim.remotedeploy.scminfo.model.AccessKeySet">
+        INSERT INTO ACCESS_KEY(USER_NAME,
+                               PERSONAL_ACCESS_TOEKEN,
+                               SCM_INFO_ALIAS)
+        VALUES (#{userName},
+                #{personalAccessToken},
+                #{scmInfoAlias})
+    </insert>
+
+    <update id="updateAccessKey" parameterType="com.kihyeonkim.remotedeploy.scminfo.model.AccessKeySet">
+        UPDATE ACCESS_KEY
+        <set>
+            <if test="@org.apache.commons.lang.StringUtils@isBlank(userName)">
+                USER_NAME = #{userName},
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isBlank(personalAccessToken)">
+                PERSONAL_ACCESS_TOEKEN= #{personalAccessToken},
+            </if>
+        </set>
+        WHERE SCM_INFO_ALIAS = #{scmInfoAlias}
+    </update>
+
+    <delete id="deleteAccessKey" parameterType="String">
+        DELETE
+        FROM ACCESS_KEY
+        WHERE SCM_INFO_ALIAS = ${scmInfoAlias}
+    </delete>
+
+</mapper>

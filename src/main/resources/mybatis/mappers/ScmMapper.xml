@@ -1,46 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.kihyeonkim.remotedeploy.scm.mapper.ScmMapper">
-	<resultMap id="ScmModel" type="com.kihyeonkim.remotedeploy.scm.model.ScmModel">
-		<result column="SCM_INFO_ALIAS" property="deployStage"/>
-		<result column="SCM_ALIAS" property="deployState"/>
-		<result column="REPOSITORY_SSH_URL" property="scenarioName"/>
-		<result column="IS_PRIVATE" property="buildTarget"/>
-	</resultMap>
+<mapper namespace="com.kihyeonkim.remotedeploy.scminfo.mapper.ScmMapper">
+    <resultMap id="scmInfo" type="com.kihyeonkim.remotedeploy.scminfo.model.Scm">
+        <result column="SCM_TYPE" property="scmType"/>
+        <result column="SCM_INFO_ALIAS" property="scmInfoAlias"/>
+        <result column="USERNAME" property="userName"/>
+        <result column="PERSONAL_ACCESS_TOKEN" property="personalAccessToken"/>
+    </resultMap>
 
-	<select id="selectDeployHistory" parameterType="hashMap" resultMap="ScmModel">
-		SELECT SCM_INFO_ALIAS,
-			   SCM_ALIAS,
-			   REPOSITORY_SSH_URL,
-			   IS_PRIVATE
-		FROM SCM
-		ORDER BY ID
-		LIMIT #{pageCount} OFFSET #{offset}
-	</select>
+    <select id="selectScmInfoList" resultMap="scmInfo">
+        SELECT SCM_TYPE,
+               SCM_INFO_ALIAS,
+               USERNAME
+        FROM SCM_INFO
+    </select>
 
-	<insert id="insertScm" parameterType="hashMap">
-		INSERT INTO SCM(SCM_INFO_ALIAS,
-						SCM_ALIAS,
-						REPOSITORY_SSH_URL,
-						IS_PRIVATE)
-		VALUES (#{scmInfoAlias},
-				#{scmAlias},
-				#{repositorySshUrl},
-				#{isPrivate})
-	</insert>
+    <insert id="insertScmInfo" parameterType="com.kihyeonkim.remotedeploy.scminfo.model.Scm">
+        INSERT INTO SCM_INFO(SCM_TYPE,
+                             SCM_INFO_ALIAS,
+                             USERNAME,
+                             PERSONAL_ACCESS_TOKEN)
+        VALUES (#{scmType},
+                #{scmInfoAlias},
+                #{userName},
+                #{personalAccessToken})
+    </insert>
 
-	<delete id="deleteScm" parameterType="hashMap">
-		DELETE
-		FROM SCM
-		WHERE SCM_ALIAS = #{scmAlias}
-	</delete>
+    <update id="updateScmInfo" parameterType="com.kihyeonkim.remotedeploy.scminfo.model.Scm">
+        UPDATE SCM_INFO
+        <set>
+            <if test="scmType != null">
+                SCM_TYPE=#{scmType},
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isBlank(userName)">
+                USER_NAME=#{userName},
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isBlank(personalAccessToken)">
+                PERSONAL_ACCESS_TOKEN=#{personalAccessToken},
+            </if>
+        </set>
+        WHERE SCM_INFO_ALIAS = #{scmInfoAlias}
+    </update>
 
-	<select id="selectScmAliasExist" parameterType="hashMap" resultType="boolean">
-		SELECT EXISTS(
-					   SELECT 1
-					   FROM SCM
-					   WHERE SCM_ALIAS = #{scmAlias}
-				   )
-	</select>
+    <delete id="deleteScmInfo" parameterType="String">
+        DELETE
+        FROM SCM_INFO
+        WHERE SCM_INFO_ALIAS = #{scmInfoAlias}
+    </delete>
+
+    <select id="selectRepoAliasExist" parameterType="String" resultType="boolean">
+        SELECT EXISTS(
+                       SELECT 1
+                       FROM SCM_INFO
+                       WHERE SCM_INFO_ALIAS = #{scmInfoAlias}
+                   )
+    </select>
 </mapper>

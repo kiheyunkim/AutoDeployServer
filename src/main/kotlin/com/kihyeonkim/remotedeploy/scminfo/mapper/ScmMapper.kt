@@ -1,6 +1,6 @@
 package com.kihyeonkim.remotedeploy.scminfo.mapper
 
-import com.kihyeonkim.remotedeploy.scminfo.model.ScmInfo
+import com.kihyeonkim.remotedeploy.scminfo.model.Scm
 import org.apache.ibatis.annotations.Mapper
 
 /**
@@ -10,12 +10,12 @@ import org.apache.ibatis.annotations.Mapper
  * Comment :
  */
 @Mapper
-interface ScmInfoMapper {
-	fun selectScmInfoList(): List<ScmInfo>
+interface ScmMapper {
+	fun selectScmInfoList(): List<Scm>
 
-	fun insertScmInfo(scmInfo: ScmInfo)
+	fun insertScmInfo(scm: Scm)
 
-	fun updateScmInfo(scmInfo: ScmInfo)
+	fun updateScmInfo(scm: Scm)
 
 	fun deleteScmInfo(scmInfoAlias: String)
 

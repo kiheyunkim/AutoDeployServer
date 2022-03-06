@@ -2,70 +2,58 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.kihyeonkim.remotedeploy.scminfo.mapper.ScmInfoMapper">
-	<resultMap id="scmInfoListModel" type="com.kihyeonkim.remotedeploy.scminfo.model.ScmInfoListModel">
-		<result column="SCM_TYPE" property="scmType"/>
-		<result column="SCM_INFO_ALIAS" property="scmInfoAlias"/>
-		<result column="USERNAME" property="userName"/>
-	</resultMap>
+    <resultMap id="scmInfo" type="com.kihyeonkim.remotedeploy.scminfo.model.ScmInfo">
+        <result column="SCM_TYPE" property="scmType"/>
+        <result column="SCM_INFO_ALIAS" property="scmInfoAlias"/>
+        <result column="USERNAME" property="userName"/>
+        <result column="PERSONAL_ACCESS_TOKEN" property="personalAccessToken"/>
+    </resultMap>
 
-	<resultMap id="gitHubKeySet" type="com.kihyeonkim.remotedeploy.deploy.model.GithubKeySetModel">
-		<result column="USERNAME" property="userName"/>
-		<result column="PERSONAL_ACCESS_TOKEN" property="accessToken"/>
-	</resultMap>
+    <select id="selectScmInfoList" resultMap="scmInfo">
+        SELECT SCM_TYPE,
+               SCM_INFO_ALIAS,
+               USERNAME
+        FROM SCM_INFO
+    </select>
 
-	<select id="selectScmInfoList" resultMap="scmInfoListModel">
-		SELECT SCM_TYPE,
-			   SCM_INFO_ALIAS,
-			   USERNAME
-		FROM SCM_INFO
-	</select>
+    <insert id="insertScmInfo" parameterType="com.kihyeonkim.remotedeploy.scminfo.model.ScmInfo">
+        INSERT INTO SCM_INFO(SCM_TYPE,
+                             SCM_INFO_ALIAS,
+                             USERNAME,
+                             PERSONAL_ACCESS_TOKEN)
+        VALUES (#{scmType},
+                #{scmInfoAlias},
+                #{userName},
+                #{personalAccessToken})
+    </insert>
 
-	<select id="selectScmInfoAliasList" resultType="string">
-		SELECT SCM_INFO_ALIAS
-		FROM SCM_INFO
-	</select>
+    <update id="updateScmInfo" parameterType="com.kihyeonkim.remotedeploy.scminfo.model.ScmInfo">
+        UPDATE SCM_INFO
+        <set>
+            <if test="scmType != null">
+                SCM_TYPE=#{scmType},
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isBlank(userName)">
+                USER_NAME=#{userName},
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isBlank(personalAccessToken)">
+                PERSONAL_ACCESS_TOKEN=#{personalAccessToken},
+            </if>
+        </set>
+        WHERE SCM_INFO_ALIAS = #{scmInfoAlias}
+    </update>
 
-	<select id="selectScmKeySet" parameterType="hashMap" resultMap="gitHubKeySet">
-		SELECT USERNAME,
-			   PERSONAL_ACCESS_TOKEN
-		FROM SCM_INFO
-		WHERE SCM_INFO_ALIAS = #{scmInfoAlias}
-	</select>
+    <delete id="deleteScmInfo" parameterType="String">
+        DELETE
+        FROM SCM_INFO
+        WHERE SCM_INFO_ALIAS = #{scmInfoAlias}
+    </delete>
 
-	<insert id="insertScmInfo" parameterType="hashMap">
-		INSERT INTO SCM_INFO(SCM_TYPE,
-							 SCM_INFO_ALIAS,
-							 USERNAME,
-							 PERSONAL_ACCESS_TOKEN)
-		VALUES (#{scmType},
-				#{scmInfoAlias},
-				#{userName},
-				#{personalAccessToken})
-	</insert>
-
-	<update id="updateScmInfo" parameterType="hashMap">
-		UPDATE SCM_INFO
-		<set>
-			<if test="scmType != null">SCM_TYPE=#{scmType},</if>
-			<if test="@org.apache.commons.lang.StringUtils@isBlank(userName)">USER_NAME=#{userName},</if>
-			<if test="@org.apache.commons.lang.StringUtils@isBlank(personalAccessToken)">
-				PERSONAL_ACCESS_TOKEN=#{personalAccessToken},
-			</if>
-		</set>
-		WHERE SCM_INFO_ALIAS = #{scmInfoAlias}
-	</update>
-
-	<delete id="deleteScmInfo" parameterType="hashMap">
-		DELETE
-		FROM SCM_INFO
-		WHERE SCM_INFO_ALIAS = #{scmInfoAlias}
-	</delete>
-
-	<select id="selectRepoAliasExist" parameterType="hashMap" resultType="boolean">
-		SELECT EXISTS(
-					   SELECT 1
-					   FROM SCM_INFO
-					   WHERE SCM_INFO_ALIAS = #{scmInfoAlias}
-				   )
-	</select>
+    <select id="selectRepoAliasExist" parameterType="String" resultType="boolean">
+        SELECT EXISTS(
+                       SELECT 1
+                       FROM SCM_INFO
+                       WHERE SCM_INFO_ALIAS = #{scmInfoAlias}
+                   )
+    </select>
 </mapper>

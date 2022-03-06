@@ -1,11 +1,10 @@
 package com.kihyeonkim.remotedeploy.scminfo.controller
 
 import com.kihyeonkim.remotedeploy.common.response.DeployResponse
+import com.kihyeonkim.remotedeploy.scminfo.model.ScmInfo
 import com.kihyeonkim.remotedeploy.scminfo.service.ScmInfoService
-import com.kihyeonkim.remotedeploy.scminfo.vo.ScmInfoVo
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 
 /**
@@ -27,14 +26,14 @@ class ScmInfoController(private val scmInfoService: ScmInfoService) {
 
 	@ApiOperation(value = "형상관리 접속 정보 추가")
 	@PostMapping("/add")
-	fun postGithubApi(@RequestBody scmInfoVo: ScmInfoVo): DeployResponse<*> {
-		return scmInfoService.addSCMInfo(scmInfoVo)
+	fun postGithubApi(@RequestBody scmInfo: ScmInfo): DeployResponse<*> {
+		return scmInfoService.addSCMInfo(scmInfo)
 	}
 
 	@ApiOperation(value = "형상관리 접속 정보 수정")
 	@PostMapping("/modify")
-	fun postModifyGithubApi(@RequestBody scmInfoVo: ScmInfoVo): DeployResponse<*> {
-		return scmInfoService.modifySCMInfo(scmInfoVo)
+	fun postModifyGithubApi(@RequestBody scmInfo: ScmInfo): DeployResponse<*> {
+		return scmInfoService.modifySCMInfo(scmInfo)
 	}
 
 	@ApiOperation(value = "형상관리 접속 정보 삭제")

@@ -1,4 +1,4 @@
-package com.kihyeonkim.remotedeploy.scm.model
+package com.kihyeonkim.remotedeploy.repositories.model
 
 /**
  * IDE : IntelliJ IDEA

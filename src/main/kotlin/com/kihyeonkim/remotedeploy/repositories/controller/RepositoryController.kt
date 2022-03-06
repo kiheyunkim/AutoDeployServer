@@ -1,9 +1,8 @@
-package com.kihyeonkim.remotedeploy.scm.controller
+package com.kihyeonkim.remotedeploy.repositories.controller
 
 import com.kihyeonkim.remotedeploy.common.response.DeployResponse
-import com.kihyeonkim.remotedeploy.scm.service.ScmService
-import com.kihyeonkim.remotedeploy.scm.vo.ScmVo
-import org.springframework.stereotype.Controller
+import com.kihyeonkim.remotedeploy.repositories.service.RepositoryService
+import com.kihyeonkim.remotedeploy.repositories.vo.ScmVo
 import org.springframework.web.bind.annotation.*
 
 /**
@@ -12,17 +11,11 @@ import org.springframework.web.bind.annotation.*
  * GitHub : http://github.com/kiheyunkim
  * Comment :
  */
-@Controller
-@RequestMapping("/scm")
-class ScmController(private val scmService: ScmService) {
-
-	@GetMapping("/keyAliasList")
-	@ResponseBody
-	fun getKeyAliasList(): DeployResponse<*> {
-		return scmService.getKeyAliasList()
-	}
-
-	@GetMapping("/repositoryList")
+//@Controller
+@RequestMapping("/repository")
+class RepositoryController(private val repositoryService: RepositoryService) {
+/*
+	@GetMapping("/list")
 	@ResponseBody
 	fun getRepositoryList(
 		@RequestParam(
@@ -30,30 +23,31 @@ class ScmController(private val scmService: ScmService) {
 			required = true
 		) scmInfoAlias: String
 	): DeployResponse<*> {
-		return scmService.getRepositoryList(scmInfoAlias)
+		return repositoryService.getRepositoryList(scmInfoAlias)
 	}
 
 	@GetMapping("/list")
 	@ResponseBody
 	fun getScmList(@RequestParam(name = "page", required = true, defaultValue = "1") page: Int): DeployResponse<*> {
-		return scmService.getScmList(page)
+		return repositoryService.getScmList(page)
 	}
 
 	@PostMapping("/add")
 	@ResponseBody
 	fun postAddScm(@RequestBody scmVo: ScmVo): DeployResponse<*> {
-		return scmService.addScm(scmVo)
+		return repositoryService.addScm(scmVo)
 	}
 
 	@PostMapping("/update")
 	@ResponseBody
 	fun postUpdateScm(@RequestBody scmVo: ScmVo): DeployResponse<*> {
-		return scmService.addScm(scmVo)
+		return repositoryService.addScm(scmVo)
 	}
 
 	@DeleteMapping("/delete")
 	@ResponseBody
 	fun deleteScm(@RequestBody scmAlias: String): DeployResponse<*>{
-		return scmService.deleteScm(scmAlias);
+		return repositoryService.deleteScm(scmAlias);
 	}
+	*/
 }

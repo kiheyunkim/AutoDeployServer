@@ -1,10 +1,9 @@
 package com.kihyeonkim.remotedeploy.deploy.service
 
-import com.kihyeonkim.remotedeploy.common.response.DeployResponse
 import com.kihyeonkim.remotedeploy.apis.github.api.GithubApi
 import com.kihyeonkim.remotedeploy.apis.jenkins.api.JenkinsApi
 import com.kihyeonkim.remotedeploy.apis.jenkins.enumeration.BuildType
-import com.kihyeonkim.remotedeploy.repo.mapper.GithubKeyMapper
+import com.kihyeonkim.remotedeploy.common.response.DeployResponse
 import org.springframework.stereotype.Service
 
 /**
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service
 @Service
 class DeployService(
 	private val jenkinsApi: JenkinsApi,
-	private val githubKeyMapper: GithubKeyMapper,
 	private val githubApi: GithubApi
 ) {
 	private val gitUrlTemplate: (String, String, String) -> String = { identityFileName, username, repositoryName ->
@@ -24,14 +22,14 @@ class DeployService(
 	}
 
 	fun createDeployJob(repoAlias: String, repositoryName: String, buildType: BuildType): DeployResponse<*> {
-		val githubKeySet = githubKeyMapper.selectRepoInfo(repoAlias)
+		val githubKeySet = null
 			?: return DeployResponse(false, null, "등록되지 않은 repoAlias")
 
 		val createResult = jenkinsApi.createJenkinsJob(
 			"DEPLOY_${repoAlias.uppercase()}_${repositoryName.uppercase()}",
 			gitUrlTemplate(
 				"${repoAlias.uppercase()}_${repositoryName.uppercase()}",
-				githubKeySet.userName,
+				githubKeySet,
 				repositoryName
 			),
 			buildType

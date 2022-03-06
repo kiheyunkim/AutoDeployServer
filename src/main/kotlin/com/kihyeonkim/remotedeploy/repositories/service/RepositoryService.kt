@@ -1,14 +1,7 @@
-package com.kihyeonkim.remotedeploy.scm.service
+package com.kihyeonkim.remotedeploy.repositories.service
 
 import com.kihyeonkim.remotedeploy.apis.github.api.GithubApi
-import com.kihyeonkim.remotedeploy.common.response.DeployResponse
-import com.kihyeonkim.remotedeploy.scm.mapper.ScmMapper
-import com.kihyeonkim.remotedeploy.scm.model.ScmModel
-import com.kihyeonkim.remotedeploy.scm.vo.ScmVo
-import com.kihyeonkim.remotedeploy.scminfo.mapper.ScmInfoMapper
-import org.apache.commons.lang.StringUtils
 import org.springframework.stereotype.Service
-import org.springframework.web.client.RestClientException
 
 /**
  * IDE : IntelliJ IDEA
@@ -17,17 +10,12 @@ import org.springframework.web.client.RestClientException
  * Comment :
  */
 @Service
-class ScmService(
-	private val scmInfoMapper: ScmInfoMapper,
-	private val scmMapper: ScmMapper,
+class RepositoryService(
+	private val scmInfoMapper: com.kihyeonkim.remotedeploy.scminfo.mapper.ScmMapper,
 	private val githubApi: GithubApi
 ) {
 	private val pageCount: Int = 10
-
-	fun getKeyAliasList(): DeployResponse<*> {
-		return DeployResponse(scmInfoMapper.selectScmInfoAliasList())
-	}
-
+/*
 	fun getRepositoryList(scmInfoAlias: String): DeployResponse<*> {
 		val scmKeySet = scmInfoMapper.selectScmKeySet(scmInfoAlias)
 
@@ -83,5 +71,5 @@ class ScmService(
 
 	fun deleteScm(scmAlias: String): DeployResponse<*> {
 		return DeployResponse(scmMapper.deleteScm(scmAlias))
-	}
+	}*/
 }

@@ -1,5 +1,6 @@
 package com.kihyeonkim.remotedeploy.scminfo.model
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.kihyeonkim.remotedeploy.scminfo.enumeration.ScmType
 
 /**
@@ -8,9 +9,10 @@ import com.kihyeonkim.remotedeploy.scminfo.enumeration.ScmType
  * GitHub : http://github.com/kiheyunkim
  * Comment :
  */
-data class ScmInfoModel(
-	var scmType: ScmType,
-	var scmInfoAlias: String,
-	var userName: String,
-	var personalAccessToken: String,
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class Scm(
+	val scmType: ScmType? = null,
+	val scmInfoAlias: String? = null,
+	val userName: String? = null,
+	val personalAccessToken: String? = null
 )

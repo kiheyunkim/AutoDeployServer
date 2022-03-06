@@ -1,6 +1,6 @@
-package com.kihyeonkim.remotedeploy.scm.mapper
+package com.kihyeonkim.remotedeploy.repositories.mapper
 
-import com.kihyeonkim.remotedeploy.scm.model.ScmModel
+import com.kihyeonkim.remotedeploy.repositories.model.ScmModel
 import org.apache.ibatis.annotations.Mapper
 
 /**

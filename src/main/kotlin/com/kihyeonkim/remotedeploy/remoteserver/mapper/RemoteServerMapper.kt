@@ -1,8 +1,6 @@
 package com.kihyeonkim.remotedeploy.remoteserver.mapper
 
-import com.kihyeonkim.remotedeploy.remoteserver.model.RemoteServerConnectionInfo
 import com.kihyeonkim.remotedeploy.remoteserver.model.RemoteServerInfo
-import com.kihyeonkim.remotedeploy.remoteserver.model.RemoteServerInfoModel
 import org.apache.ibatis.annotations.Mapper
 
 /**
@@ -13,9 +11,9 @@ import org.apache.ibatis.annotations.Mapper
  */
 @Mapper
 interface RemoteServerMapper {
-	fun selectRemoteServerInfoList(): RemoteServerInfoModel
+	fun selectRemoteServerInfoList(): RemoteServerInfo
 
-	fun selectRemoteServerConnectionInfo(remoteServerAlias: String): RemoteServerConnectionInfo?
+	fun selectRemoteServerConnectionInfo(remoteServerAlias: String): RemoteServerInfo?
 
 	fun insertRemoteServerInfo(remoteServerInfo: RemoteServerInfo)
 

@@ -20,7 +20,7 @@ import java.nio.file.attribute.PosixFilePermissions
  * GitHub : http://github.com/kiheyunkim
  * Comment :
  */
-@Component
+
 class SshConfigRabbitMQConsumer(
 	private val sshConfigRepository: SshConfigRepository
 ) {
@@ -28,12 +28,10 @@ class SshConfigRabbitMQConsumer(
 	private lateinit var sshHome: String
 
 	private val configTemplate: (String, String, String) -> String = { host, hostName, identityFileName ->
-		"""Host $host
-	HostName $hostName
-	StrictHostKeyChecking no
-	IdentityFile /var/jenkins_home/.ssh/$identityFileName
-
-""".trimIndent()
+			"""Host $host
+		HostName $hostName
+		StrictHostKeyChecking no
+		IdentityFile /var/jenkins_home/.ssh/$identityFileName""".trimIndent()
 	}
 
 	@RabbitListener(queues = ["sshConfig"])

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kihyeonkim.remotedeploy.repositories.mapper.RepositoryMapper">
+    <resultMap id="repository" type="com.kihyeonkim.remotedeploy.repositories.model.Repository">
+        <result column="REPOSITORY_ALIAS" property="repositoryAlias"/>
+        <result column="SCM_ALIAS" property="scmAlias"/>
+        <result column="REPOSITORY_SSH_URL" property="repositorySshUrl"/>
+        <result column="IS_PRIVATE" property="isPrivate"/>
+    </resultMap>
+
+    <select id="selectRepositoryInfoList" parameterType="hashmap" resultMap="repository">
+        SELECT REPOSITORY_ALIAS,
+               REPOSITORY_SSH_URL
+        FROM REPOSITORIES
+        LIMIT #{pageCount} OFFSET #{offset}
+    </select>
+
+    <select id="selectRepositoryDetail" parameterType="String" resultMap="repository">
+        SELECT REPOSITORY_ALIAS,
+               SCM_ALIAS,
+               REPOSITORY_SSH_URL,
+               IS_PRIVATE
+        FROM REPOSITORIES
+        WHERE REPOSITORY_ALIAS = #{repositoryAlias}
+    </select>
+
+    <insert id="insertRepositoryInfo" parameterType="com.kihyeonkim.remotedeploy.repositories.model.Repository">
+        INSERT INTO REPOSITORIES(REPOSITORY_ALIAS,
+                                 SCM_ALIAS,
+                                 REPOSITORY_SSH_URL,
+                                 IS_PRIVATE)
+        VALUES (#{repositoryAlias},
+                #{scmAlias},
+                #{repositorySshUrl},
+                #{isPrivate})
+    </insert>
+
+    <update id="updateRepositoryInfo" parameterType="com.kihyeonkim.remotedeploy.repositories.model.Repository">
+        UPDATE REPOSITORIES
+        <set>
+            <if test="@org.apache.commons.lang.StringUtils@isBlank(scmAlias)">
+                SCM_ALIAS = #{scmAlias},
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isBlank(repositorySshUrl)">
+                REPOSITORY_SSH_URL = #{repositorySshUrl},
+            </if>
+            IS_PRIVATE= #{isPrivate},
+        </set>
+        WHERE REPOSITORY_ALIAS = #{repositoryAlias}
+    </update>
+
+    <delete id="deleteRepositoryInfo" parameterType="String">
+        DELETE
+        FROM REPOSITORIES
+        WHERE REPOSITORY_ALIAS = ${repositoryAlias}
+    </delete>
+
+</mapper>

@@ -23,14 +23,12 @@ class RepositoryController(private val repositoryService: RepositoryService) {
 	@ResponseBody
 	fun getRepositoryList(
 		@RequestParam(
-			name = "scmInfoAlias",
-			required = true
-		) scmInfoAlias: String,
-		@RequestParam(
-			name = "page", required = true, defaultValue = "1"
+			name = "page",
+			required = true,
+			defaultValue = "1"
 		) page: Int
 	): DeployResponse<*> {
-		return repositoryService.getRepositoryList(scmInfoAlias)
+		return repositoryService.getRepositoryList(page)
 	}
 
 	@GetMapping("/detail")
@@ -38,28 +36,31 @@ class RepositoryController(private val repositoryService: RepositoryService) {
 	@ResponseBody
 	fun getRepositoryDetail(
 		@RequestParam(
-			name = "scmInfoAlias",
+			name = "repositoryAlias",
 			required = true
-		) scmInfoAlias: String
+		) repositoryAlias: String
 	): DeployResponse<*> {
-		return repositoryService.getRepositoryDetail()
+		return repositoryService.getRepositoryDetail(repositoryAlias)
 	}
 
 	@PostMapping("/add")
+	@ApiOperation("레포지토리 정보 추가")
 	@ResponseBody
-	fun postAddScm(@RequestBody repository: Repository): DeployResponse<*> {
-		return repositoryService.addScm(repository)
+	fun postAddScm(@RequestBody repository: Repository): DeployResponse<Boolean?> {
+		return repositoryService.addRepositoryInfo(repository)
 	}
 
 	@PostMapping("/update")
+	@ApiOperation("레포지토리 정보 수정")
 	@ResponseBody
-	fun postUpdateScm(@RequestBody repository: Repository): DeployResponse<*> {
-		return repositoryService.addScm(repository)
+	fun postUpdateScm(@RequestBody repository: Repository): DeployResponse<Boolean?> {
+		return repositoryService.updateRepositoryInfo(repository)
 	}
 
 	@DeleteMapping("/delete")
+	@ApiOperation("레포지토리 정보 삭제")
 	@ResponseBody
-	fun deleteScm(@RequestBody scmAlias: String): DeployResponse<*> {
-		return repositoryService.deleteScm(scmAlias);
+	fun deleteScm(@RequestBody scmAlias: String): DeployResponse<Boolean?> {
+		return repositoryService.deleteRepositoryInfo(scmAlias);
 	}
 }

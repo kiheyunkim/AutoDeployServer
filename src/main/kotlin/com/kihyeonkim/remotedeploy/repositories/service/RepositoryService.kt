@@ -1,6 +1,10 @@
 package com.kihyeonkim.remotedeploy.repositories.service
 
 import com.kihyeonkim.remotedeploy.apis.github.api.GithubApi
+import com.kihyeonkim.remotedeploy.common.response.DeployResponse
+import com.kihyeonkim.remotedeploy.repositories.mapper.RepositoryMapper
+import com.kihyeonkim.remotedeploy.repositories.model.Repository
+import org.apache.commons.lang.StringUtils
 import org.springframework.stereotype.Service
 
 /**
@@ -11,65 +15,57 @@ import org.springframework.stereotype.Service
  */
 @Service
 class RepositoryService(
-	private val scmInfoMapper: com.kihyeonkim.remotedeploy.scminfo.mapper.ScmMapper,
+	private val repositoryMapper: RepositoryMapper,
 	private val githubApi: GithubApi
 ) {
 	private val pageCount: Int = 10
-/*
-	fun getRepositoryList(scmInfoAlias: String): DeployResponse<*> {
-		val scmKeySet = scmInfoMapper.selectScmKeySet(scmInfoAlias)
 
-		return DeployResponse(githubApi.getRepositoryList(scmKeySet.accessToken))
-	}
-
-	fun getScmList(page: Int): DeployResponse<*> {
+	fun getRepositoryList(page: Int): DeployResponse<List<Repository>?> {
 		if (page < 0) {
 			return DeployResponse(null, null, "잘못된 페이지 입니다.")
 		}
 
-		return DeployResponse(scmMapper.selectScmList((page - 1) * pageCount, pageCount))
+		return DeployResponse(repositoryMapper.selectRepositoryInfoList(pageCount, (page - 1) * pageCount))
 	}
 
-	fun addScm(scmVo: ScmVo): DeployResponse<*> {
-		if (scmVo.isPrivate) {
-			if (StringUtils.isBlank(scmVo.scmInfoAlias) || StringUtils.isBlank(scmVo.scmAlias) || StringUtils.isBlank(
-					scmVo.repositoryName
-				)
-			) {
-				return DeployResponse(null, null, "값이 누락됐습니다.")
-			}
-		} else {
-			if (StringUtils.isBlank(scmVo.scmAlias) || StringUtils.isBlank(scmVo.repositoryName)) {
-				return DeployResponse(null, null, "값이 누락됐습니다.")
-			}
-		}
+	fun getRepositoryDetail(repositoryAlias: String): DeployResponse<Repository> {
 
-		val scmAliasExist = scmMapper.selectScmAliasExist(scmVo.scmAlias)
-		if (scmAliasExist) {
-			return DeployResponse(null, null, "중복된 scm ALias입니다.")
-		}
-
-		val scmKeySet = scmInfoMapper.selectScmKeySet(scmVo.scmInfoAlias!!)
-
-		val repositorySshUrl = try {
-			githubApi.getRepositorySshUrl(scmKeySet.userName, scmVo.repositoryName, scmKeySet.accessToken)
-		} catch (restClientException: RestClientException) {
-			return DeployResponse(null, null, "repository 정보 조회 실패")
-		}
-
-		return DeployResponse(
-			scmMapper.insertScm(
-				ScmModel(
-					scmVo.scmInfoAlias,
-					scmVo.scmAlias,
-					repositorySshUrl,
-					scmVo.isPrivate
-				)
-			)
-		)
+		return DeployResponse(repositoryMapper.selectRepositoryDetail(repositoryAlias))
 	}
 
-	fun deleteScm(scmAlias: String): DeployResponse<*> {
-		return DeployResponse(scmMapper.deleteScm(scmAlias))
-	}*/
+	fun addRepositoryInfo(repository: Repository): DeployResponse<Boolean?> {
+		if (StringUtils.isEmpty(repository.repositoryAlias) ||
+			StringUtils.isEmpty(repository.scmAlias) ||
+			StringUtils.isEmpty(repository.repositorySshUrl) ||
+			repository.isPrivate
+		) {
+			return DeployResponse(null, null, "필요 값이 누락되었습니다")
+		}
+
+		val insertResult = repositoryMapper.insertRepositoryInfo(repository)
+
+		return DeployResponse(insertResult == 1, null, null)
+	}
+
+	fun updateRepositoryInfo(repository: Repository): DeployResponse<Boolean?> {
+		if (StringUtils.isEmpty(repository.repositoryAlias) ||
+			StringUtils.isEmpty(repository.scmAlias)
+		) {
+			return DeployResponse(null, null, "필요 값이 누락되었습니다")
+		}
+
+		val updateResult = repositoryMapper.updateRepositoryInfo(repository)
+
+		return DeployResponse(updateResult == 1, null, null)
+	}
+
+	fun deleteRepositoryInfo(repositoryAlias: String): DeployResponse<Boolean?> {
+		if (StringUtils.isEmpty(repositoryAlias)) {
+			return DeployResponse(null, null, "필요 값이 누락되었습니다")
+		}
+
+		val deleteResult = repositoryMapper.deleteRepositoryInfo(repositoryAlias)
+
+		return DeployResponse(deleteResult == 1, null, null)
+	}
 }

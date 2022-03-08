@@ -34,7 +34,7 @@ class RemoteServerController(private val remoteServerService: RemoteServerServic
 		return remoteServerService.getRemoteServerConnectionInfo(remoteServerAlias)
 	}
 
-	@ApiOperation(value = "원격 서버 상세 정보 반환")
+	@ApiOperation(value = "원격 서버 상세 정보 추가")
 	@PostMapping("/add")
 	fun postServerInfo(remoteServerInfoVo: RemoteServerInfo): DeployResponse<*> {
 		return remoteServerService.addRemoteServeInfo(remoteServerInfoVo)

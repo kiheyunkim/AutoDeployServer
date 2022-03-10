@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 /**
  * IDE : IntelliJ IDEA
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping
  * GitHub : http://github.com/kiheyunkim
  * Comment :
  */
-@Controller
+@RestController
 @Api("원격 서버 관리")
 @RequestMapping("/remoteServer")
 class RemoteServerController(private val remoteServerService: RemoteServerService) {

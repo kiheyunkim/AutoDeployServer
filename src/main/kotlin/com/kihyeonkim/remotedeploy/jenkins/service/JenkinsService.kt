@@ -11,7 +11,7 @@ class JenkinsService(private val jenkinsMapper: JenkinsMapper) {
 
 	private val pageCount: Int = 10
 
-	fun getJenkinsLise(page: Int): DeployResponse<List<Jenkins>?> {
+	fun getJenkinsList(page: Int): DeployResponse<List<Jenkins>?> {
 		if (page < 0) {
 			return DeployResponse(null, null, "잘못된 페이지 입니다.")
 		}

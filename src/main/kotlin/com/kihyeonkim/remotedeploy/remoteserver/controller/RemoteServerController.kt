@@ -1,15 +1,11 @@
 package com.kihyeonkim.remotedeploy.remoteserver.controller
 
 import com.kihyeonkim.remotedeploy.common.response.DeployResponse
-import com.kihyeonkim.remotedeploy.remoteserver.service.RemoteServerService
 import com.kihyeonkim.remotedeploy.remoteserver.model.RemoteServerInfo
+import com.kihyeonkim.remotedeploy.remoteserver.service.RemoteServerService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
-import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 
 /**
  * IDE : IntelliJ IDEA
@@ -17,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping
  * GitHub : http://github.com/kiheyunkim
  * Comment :
  */
-@Controller
+@RestController
 @Api("원격 서버 관리")
 @RequestMapping("/remoteServer")
 class RemoteServerController(private val remoteServerService: RemoteServerService) {

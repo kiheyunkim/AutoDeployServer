@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kihyeonkim.remotedeploy.jenkins.mapper.JenkinsMapper">
+    <resultMap id="jenkins" type="com.kihyeonkim.remotedeploy.scminfo.model.AccessKeySet">
+        <result column="JENKINS_ID" property="jenkinsId"/>
+        <result column="JENKINS_USER_ID" property="jenkinsUserId"/>
+        <result column="JENKINS_PASSWORD" property="jenkinsPasswd"/>
+        <result column="JENKINS_IP_ADDRESS" property="jenkinsIpAddress"/>
+        <result column="JENKINS_PORT" property="jenkinsPort"/>
+    </resultMap>
+
+    <select id="selectJenkinsList" parameterType="hashMap" resultMap="jenkins">
+        SELECT JENKINS_ID,
+               JENKINS_USER_ID,
+               JENKINS_IP_ADDRESS,
+               JENKINS_PORT
+        FROM JENKINS_INFO
+        ORDER BY ID
+        LIMIT #{pageCount}
+        OFFSET #{offset}
+    </select>
+
+    <insert id="insertJenkinsInfo" parameterType="com.kihyeonkim.remotedeploy.scminfo.model.AccessKeySet">
+        INSERT INTO JENKINS_INFO(JENKINS_ID,
+                                 JENKINS_USER_ID,
+                                 JENKINS_PASSWORD,
+                                 JENKINS_IP_ADDRESS,
+                                 JENKINS_PORT)
+        VALUES (UUID(),
+                #{jenkinsUserId},
+                #{jenkinsPasswd},
+                #{jenkinsIpAddress},
+                #{scmInfoAlias})
+    </insert>
+
+    <delete id="deleteJenkinsInfo" parameterType="String">
+        DELETE
+        FROM JENKINS_INFO
+        WHERE JENKINS_ID = ${jenkinsId}
+    </delete>
+
+</mapper>
